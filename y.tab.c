@@ -69,17 +69,30 @@
 #line 1 "dessin.yy"
 
 #include <stdio.h>
-int yyerror(const char *s);
-extern FILE *yyin;
+#include "Position.h"
+#include "Variable.h"
+#ifdef  __cplusplus
+extern "C" {
+#endif
+	
+#ifdef  __cplusplus
+}
+#endif
+
 int yylex();
 
-int posX=0;
-int posY=0;
+int yyerror(const char *s);
+extern FILE *yyin;
+
+struct Position p;
+struct Liste *maListe;
+
 char* couleur="noir";
 char** lvar;
 
 
-#line 83 "y.tab.c"
+
+#line 96 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -179,12 +192,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 14 "dessin.yy"
+#line 28 "dessin.yy"
 
         int num;
 	char *variable;
 
-#line 188 "y.tab.c"
+#line 201 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -559,12 +572,12 @@ static const yytype_int8 yytranslate[] =
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_int8 yyrline[] =
+static const yytype_uint8 yyrline[] =
 {
-       0,    33,    33,    35,    36,    40,    41,    42,    43,    45,
-      50,    52,    59,    63,    69,    75,    77,    82,    88,    89,
-      91,    92,    93,    94,    95,    96,    99,   101,   102,   103,
-     106,   108,   109,   110,   111,   114,   115,   116,   120
+       0,    47,    47,    49,    50,    54,    55,    56,    57,    59,
+      64,    66,    74,    78,    84,    90,    92,    97,   103,   104,
+     106,   107,   108,   109,   110,   111,   114,   118,   119,   120,
+     123,   125,   126,   127,   128,   131,   132,   133,   137
 };
 #endif
 
@@ -1412,244 +1425,247 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 33 "dessin.yy"
-           {printf("fin programme\n");return 0;}
-#line 1418 "y.tab.c"
+#line 47 "dessin.yy"
+           {printf("fin programme\n\n");afficherListe(maListe);return 0;}
+#line 1431 "y.tab.c"
     break;
 
   case 3:
-#line 35 "dessin.yy"
+#line 49 "dessin.yy"
                         {}
-#line 1424 "y.tab.c"
+#line 1437 "y.tab.c"
     break;
 
   case 4:
-#line 36 "dessin.yy"
+#line 50 "dessin.yy"
       {}
-#line 1430 "y.tab.c"
+#line 1443 "y.tab.c"
     break;
 
   case 5:
-#line 40 "dessin.yy"
+#line 54 "dessin.yy"
                                      {printf("dessin fini ");}
-#line 1436 "y.tab.c"
+#line 1449 "y.tab.c"
     break;
 
   case 6:
-#line 41 "dessin.yy"
+#line 55 "dessin.yy"
              {printf("boucle fini\n");}
-#line 1442 "y.tab.c"
+#line 1455 "y.tab.c"
     break;
 
   case 7:
-#line 42 "dessin.yy"
+#line 56 "dessin.yy"
                      {printf("declarer valeur %s\n",(yyvsp[-1].variable));}
-#line 1448 "y.tab.c"
+#line 1461 "y.tab.c"
     break;
 
   case 8:
-#line 43 "dessin.yy"
+#line 57 "dessin.yy"
               {printf("changer couleur\n");}
-#line 1454 "y.tab.c"
+#line 1467 "y.tab.c"
     break;
 
   case 9:
-#line 45 "dessin.yy"
+#line 59 "dessin.yy"
                                                                                                                {
 	printf("trait de %d,%d a %d,%d en %s\n",(yyvsp[-8].num),(yyvsp[-6].num),(yyvsp[-3].num),(yyvsp[-1].num),couleur);
 }
-#line 1462 "y.tab.c"
+#line 1475 "y.tab.c"
     break;
 
   case 10:
-#line 50 "dessin.yy"
+#line 64 "dessin.yy"
               {printf("ligne\n");}
-#line 1468 "y.tab.c"
+#line 1481 "y.tab.c"
     break;
 
   case 11:
-#line 52 "dessin.yy"
+#line 66 "dessin.yy"
                                                                                                                 {
+	//visitCarree();
 	printf("trait de %d,%d a %d,%d en %s\n",(yyvsp[-8].num),(yyvsp[-6].num),(yyvsp[-3].num),(yyvsp[-6].num),couleur);
 	printf("trait de %d,%d a %d,%d en %s\n",(yyvsp[-3].num),(yyvsp[-6].num),(yyvsp[-3].num),(yyvsp[-1].num),couleur);
 	printf("trait de %d,%d a %d,%d en %s\n",(yyvsp[-3].num),(yyvsp[-1].num),(yyvsp[-8].num),(yyvsp[-1].num),couleur);
 	printf("trait de %d,%d a %d,%d en %s\n",(yyvsp[-8].num),(yyvsp[-1].num),(yyvsp[-8].num),(yyvsp[-6].num),couleur);
 }
-#line 1479 "y.tab.c"
+#line 1493 "y.tab.c"
     break;
 
   case 12:
-#line 59 "dessin.yy"
+#line 74 "dessin.yy"
                {
 	printf("carree\n");
 }
-#line 1487 "y.tab.c"
+#line 1501 "y.tab.c"
     break;
 
   case 13:
-#line 63 "dessin.yy"
+#line 78 "dessin.yy"
                                                              {
-	printf("trait de %d,%d a %d,%d en %s\n",posX,posY,(yyvsp[-3].num),(yyvsp[-1].num),couleur);
-	posX=(yyvsp[-3].num);
-	posY=(yyvsp[-1].num);
+	printf("trait de %d,%d a %d,%d en %s\n",p.posX,p.posY,(yyvsp[-3].num),(yyvsp[-1].num),couleur);
+	p.posX=(yyvsp[-3].num);
+	p.posY=(yyvsp[-1].num);
 }
-#line 1497 "y.tab.c"
+#line 1511 "y.tab.c"
     break;
 
   case 14:
-#line 69 "dessin.yy"
+#line 84 "dessin.yy"
                                          {
-
+	insertion(maListe, (yyvsp[0].num),(yyvsp[-2].variable));
 	printf("variable declare est : %s\n",(yyvsp[-2].variable));(yyval.variable)=(yyvsp[-2].variable);
-}
-#line 1506 "y.tab.c"
-    break;
-
-  case 15:
-#line 75 "dessin.yy"
-               {char* v =(yyvsp[0].variable);(yyval.variable)=v;printf("variable est %s\n",(yyvsp[0].variable));}
-#line 1512 "y.tab.c"
-    break;
-
-  case 16:
-#line 77 "dessin.yy"
-                                                                                                                 {
-printf("boucle");
 }
 #line 1520 "y.tab.c"
     break;
 
+  case 15:
+#line 90 "dessin.yy"
+               {char* v =(yyvsp[0].variable);(yyval.variable)=v;printf("variable est %s\n",(yyvsp[0].variable));}
+#line 1526 "y.tab.c"
+    break;
+
+  case 16:
+#line 92 "dessin.yy"
+                                                                                                                 {
+printf("boucle");
+}
+#line 1534 "y.tab.c"
+    break;
+
   case 17:
-#line 82 "dessin.yy"
+#line 97 "dessin.yy"
                                                   {
-	posX=(yyvsp[-2].num);posY=(yyvsp[0].num);
+	p.posX=(yyvsp[-2].num);p.posY=(yyvsp[0].num);
 	printf("Dessin commence a : %d , %d\n",(yyvsp[-2].num),(yyvsp[0].num));
 }
-#line 1529 "y.tab.c"
+#line 1543 "y.tab.c"
     break;
 
   case 18:
-#line 88 "dessin.yy"
+#line 103 "dessin.yy"
                               {}
-#line 1535 "y.tab.c"
+#line 1549 "y.tab.c"
     break;
 
   case 19:
-#line 89 "dessin.yy"
+#line 104 "dessin.yy"
       {}
-#line 1541 "y.tab.c"
+#line 1555 "y.tab.c"
     break;
 
   case 21:
-#line 92 "dessin.yy"
+#line 107 "dessin.yy"
                      {printf("deplacer crayon\n");}
-#line 1547 "y.tab.c"
+#line 1561 "y.tab.c"
     break;
 
   case 22:
-#line 93 "dessin.yy"
+#line 108 "dessin.yy"
                      {printf("declarer valeur\n");}
-#line 1553 "y.tab.c"
+#line 1567 "y.tab.c"
     break;
 
   case 23:
-#line 94 "dessin.yy"
+#line 109 "dessin.yy"
                     {printf("ligne dessiner\n");}
-#line 1559 "y.tab.c"
+#line 1573 "y.tab.c"
     break;
 
   case 24:
-#line 95 "dessin.yy"
+#line 110 "dessin.yy"
                      {printf("carree dessiner\n");}
-#line 1565 "y.tab.c"
+#line 1579 "y.tab.c"
     break;
 
   case 25:
-#line 96 "dessin.yy"
+#line 111 "dessin.yy"
       {}
-#line 1571 "y.tab.c"
+#line 1585 "y.tab.c"
     break;
 
   case 26:
-#line 99 "dessin.yy"
-                              { printf("couleur\n"); }
-#line 1577 "y.tab.c"
+#line 114 "dessin.yy"
+                              {
+	printf("couleur\n"); 
+}
+#line 1593 "y.tab.c"
     break;
 
   case 27:
-#line 101 "dessin.yy"
+#line 118 "dessin.yy"
            {printf("bleu\n");couleur="bleu";}
-#line 1583 "y.tab.c"
+#line 1599 "y.tab.c"
     break;
 
   case 28:
-#line 102 "dessin.yy"
+#line 119 "dessin.yy"
         {printf("rouge\n");couleur="rouge";}
-#line 1589 "y.tab.c"
+#line 1605 "y.tab.c"
     break;
 
   case 29:
-#line 103 "dessin.yy"
+#line 120 "dessin.yy"
        {printf("noir\n");couleur="noir";}
-#line 1595 "y.tab.c"
+#line 1611 "y.tab.c"
     break;
 
   case 30:
-#line 106 "dessin.yy"
+#line 123 "dessin.yy"
                                          {(yyval.num)=(yyvsp[-1].num);}
-#line 1601 "y.tab.c"
+#line 1617 "y.tab.c"
     break;
 
   case 31:
-#line 108 "dessin.yy"
+#line 125 "dessin.yy"
                             { printf("%d + %d\n",(yyvsp[-2].num),(yyvsp[0].num));(yyval.num)=(yyvsp[-2].num)+(yyvsp[0].num);}
-#line 1607 "y.tab.c"
+#line 1623 "y.tab.c"
     break;
 
   case 32:
-#line 109 "dessin.yy"
+#line 126 "dessin.yy"
                       { printf("%d - %d\n",(yyvsp[-2].num),(yyvsp[0].num));(yyval.num)=(yyvsp[-2].num)-(yyvsp[0].num);}
-#line 1613 "y.tab.c"
+#line 1629 "y.tab.c"
     break;
 
   case 33:
-#line 110 "dessin.yy"
+#line 127 "dessin.yy"
                      { printf("%d * %d\n",(yyvsp[-2].num),(yyvsp[0].num));(yyval.num)=(yyvsp[-2].num)*(yyvsp[0].num);}
-#line 1619 "y.tab.c"
+#line 1635 "y.tab.c"
     break;
 
   case 34:
-#line 111 "dessin.yy"
+#line 128 "dessin.yy"
                         { printf("%d / %d\n",(yyvsp[-2].num),(yyvsp[0].num));(yyval.num)=(yyvsp[-2].num)/(yyvsp[0].num);}
-#line 1625 "y.tab.c"
+#line 1641 "y.tab.c"
     break;
 
   case 35:
-#line 114 "dessin.yy"
+#line 131 "dessin.yy"
           {(yyval.num)=(yyvsp[0].num);}
-#line 1631 "y.tab.c"
+#line 1647 "y.tab.c"
     break;
 
   case 36:
-#line 115 "dessin.yy"
+#line 132 "dessin.yy"
       {}
-#line 1637 "y.tab.c"
+#line 1653 "y.tab.c"
     break;
 
   case 37:
-#line 116 "dessin.yy"
+#line 133 "dessin.yy"
             {(yyval.num)=(yyvsp[0].num);}
-#line 1643 "y.tab.c"
+#line 1659 "y.tab.c"
     break;
 
   case 38:
-#line 120 "dessin.yy"
+#line 137 "dessin.yy"
         {(yyval.num)=(yyvsp[0].num);}
-#line 1649 "y.tab.c"
+#line 1665 "y.tab.c"
     break;
 
 
-#line 1653 "y.tab.c"
+#line 1669 "y.tab.c"
 
       default: break;
     }
@@ -1881,11 +1897,12 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 123 "dessin.yy"
+#line 140 "dessin.yy"
 
 
 int main(int argc, char *argv[])
 {
+	maListe = initialisation();
 	printf("Application dessin \n");
 	yyin=fopen(argv[1],"r+");
 	if(yyin==NULL)

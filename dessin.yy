@@ -1,15 +1,29 @@
 %{
 #include <stdio.h>
-int yyerror(const char *s);
-extern FILE *yyin;
+#include "Position.h"
+#include "Variable.h"
+#ifdef  __cplusplus
+extern "C" {
+#endif
+	
+#ifdef  __cplusplus
+}
+#endif
+
 int yylex();
 
-int posX=0;
-int posY=0;
+int yyerror(const char *s);
+extern FILE *yyin;
+
+struct Position p;
+struct Liste *maListe;
+
 char* couleur="noir";
 char** lvar;
 
+
 %}
+
 
 %union {
         int num;
@@ -30,7 +44,7 @@ char** lvar;
 
 %%
 
-S : DESSIN {printf("fin programme\n");return 0;}
+S : DESSIN {printf("fin programme\n\n");afficherListe(maListe);return 0;}
 
 DESSIN : DESSING DESSIN {}
 | fin {}
@@ -50,6 +64,7 @@ DESSINERLIGNE :  LIGNE parOuvrant NOMBRE virgule NOMBRE parFermant parOuvrant NO
 LIGNE : ligne {printf("ligne\n");}
 
 DESSINERCARREE : CARREE parOuvrant NOMBRE virgule NOMBRE parFermant parOuvrant NOMBRE virgule NOMBRE parFermant {
+	//visitCarree();
 	printf("trait de %d,%d a %d,%d en %s\n",$3,$5,$8,$5,couleur);
 	printf("trait de %d,%d a %d,%d en %s\n",$8,$5,$8,$10,couleur);
 	printf("trait de %d,%d a %d,%d en %s\n",$8,$10,$3,$10,couleur);
@@ -61,13 +76,13 @@ CARREE : carree{
 }
 
 DEPLACERCRAYON : parOuvrant NOMBRE virgule NOMBRE parFermant {
-	printf("trait de %d,%d a %d,%d en %s\n",posX,posY,$2,$4,couleur);
-	posX=$2;
-	posY=$4;
+	printf("trait de %d,%d a %d,%d en %s\n",p.posX,p.posY,$2,$4,couleur);
+	p.posX=$2;
+	p.posY=$4;
 }
 
 DECLARERVALEUR : VARIABLE assigne NOMBRE {
-
+	insertion(maListe, $3,$1);
 	printf("variable declare est : %s\n",$1);$$=$1;
 }
 ;
@@ -80,7 +95,7 @@ printf("boucle");
 ;
 
 DEBUTDESSIN : baisserCrayon NOMBRE virgule NOMBRE {
-	posX=$2;posY=$4;
+	p.posX=$2;p.posY=$4;
 	printf("Dessin commence a : %d , %d\n",$2,$4);
 }
 ;
@@ -96,7 +111,9 @@ DESSINERG :COULEUR fin
 | fin {}
 ;
 
-COULEUR : colSymb COL colSymb { printf("couleur\n"); }
+COULEUR : colSymb COL colSymb {
+	printf("couleur\n"); 
+}
 
 COL : bleu {printf("bleu\n");couleur="bleu";}
 | rouge {printf("rouge\n");couleur="rouge";}
@@ -124,6 +141,7 @@ nombreD {$$=$1;}
 
 int main(int argc, char *argv[])
 {
+	maListe = initialisation();
 	printf("Application dessin \n");
 	yyin=fopen(argv[1],"r+");
 	if(yyin==NULL)
