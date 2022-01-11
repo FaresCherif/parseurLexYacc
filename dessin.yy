@@ -31,16 +31,16 @@ char** lvar;
 }
 
 %token fin plus moins fois diviser finProgramme baisserCrayon leverCrayon
-%token bleu rouge noir colSymb virgule chevronOuvrant chevronFermant assigne parOuvrant parFermant ligne carree
+%token bleu rouge noir colSymb virgule chevronOuvrant chevronFermant assigne parOuvrant parFermant ligne carree dec
 %token<num> nombreD
 %token<variable> var
 
 %start S
 
-%type<num> DESSIN NOMBRE CALCUL DESSINER COULEUR BOUCLE DEPLACERCRAYON DESSING X OPERATION
-%type<num> DESSINERLIGNE DESSINERCARREE LIGNE CARREE
-%type<variable> VARIABLE
-%type<variable> DECLARERVALEUR
+%type<num> DESSIN NOMBRE CALCUL DESSINER COULEUR BOUCLE SUITEBOUCLE DEPLACERCRAYON DESSING X OPERATION
+%type<num> DESSINERLIGNE DESSINERCARREE LIGNE CARREE 
+%type<variable> VARIABLE DEBUTBOUCLE
+%type<variable> DECLARERVALEUR DEC
 
 %%
 
@@ -53,6 +53,7 @@ DESSIN : DESSING DESSIN {}
 DESSING :
 DEBUTDESSIN DESSINER leverCrayon fin {printf("dessin fini ");}
 | BOUCLE fin {printf("boucle fini\n");}
+| INITVALEUR fin {printf("valeur initialiser\n");}
 | DECLARERVALEUR fin {printf("declarer valeur %s\n",$1);}
 | COULEUR fin {printf("changer couleur\n");}
 
@@ -62,6 +63,11 @@ DESSINERLIGNE :  LIGNE parOuvrant NOMBRE virgule NOMBRE parFermant parOuvrant NO
 ;
 
 LIGNE : ligne {printf("ligne\n");}
+
+INITVALEUR : DEC var {printf("valeur initialiser");insertion(maListe,$2);}
+;
+
+DEC : dec {printf("declar");}
 
 DESSINERCARREE : CARREE parOuvrant NOMBRE virgule NOMBRE parFermant parOuvrant NOMBRE virgule NOMBRE parFermant {
 	//visitCarree();
@@ -82,15 +88,46 @@ DEPLACERCRAYON : parOuvrant NOMBRE virgule NOMBRE parFermant {
 }
 
 DECLARERVALEUR : VARIABLE assigne NOMBRE {
-	insertion(maListe, $3,$1);
+	if(!chercherVar(maListe,$1)){
+		yyerror("variable non declare");
+		return 2;
+	}
+
+        if(isVarBoucle(maListe,$1)){
+		printf("variable boucle \n\n");
+		yyerror("affectation a var boucle");
+		return 2;
+	}
+	else{
+		printf("%s n'est pas boucle :\n\n",$1); 
+	}
+	setVal(maListe,$3,$1);
 	printf("variable declare est : %s\n",$1);$$=$1;
 }
 ;
 
 VARIABLE : var {char* v =$1;$$=v;printf("variable est %s\n",$1);}
 
-BOUCLE : chevronOuvrant NOMBRE virgule NOMBRE virgule NOMBRE chevronFermant DESSIN chevronOuvrant chevronFermant {
-printf("boucle");
+DEBUTBOUCLE : chevronOuvrant var virgule NOMBRE virgule NOMBRE chevronFermant {
+printf("boucle sur %s",$2);
+if(!chercherVar(maListe,$2)){
+        return yyerror("variable non initialise");
+        }
+        else{
+                setVarBoucle(maListe,$2);
+        }
+	$$=$2;
+
+}
+;
+
+BOUCLE : DEBUTBOUCLE DESSIN SUITEBOUCLE {
+setVarBoucle(maListe,$1);
+}
+;
+
+SUITEBOUCLE : chevronOuvrant chevronFermant {
+	printf("fin boucle");
 }
 ;
 
@@ -105,6 +142,7 @@ DESSINER : DESSINERG DESSINER {}
 
 DESSINERG :COULEUR fin
 | DEPLACERCRAYON fin {printf("deplacer crayon\n");}
+| INITVALEUR fin {printf("valeur initialiser\n");}
 | DECLARERVALEUR fin {printf("declarer valeur\n");}
 | DESSINERLIGNE fin {printf("ligne dessiner\n");}
 | DESSINERCARREE fin {printf("carree dessiner\n");}
@@ -134,7 +172,7 @@ NOMBRE: X {$$=$1;}
 ;
 
 X :
-nombreD {$$=$1;}
+nombreD {$$=$1;printf("%d",$1);}
 ;
 
 %%
