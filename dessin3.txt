@@ -1,4 +1,7 @@
 DEC x;
-Boucle(x,2,3)DEC y;y<-5;;
+x<-5;
+DebutDessin{x,2;
+((x+1),12);
 ;
+};
 ;

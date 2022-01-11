@@ -167,7 +167,7 @@ CALCUL : NOMBRE plus NOMBRE { printf("%d + %d\n",$1,$3);$$=$1+$3;}
 ;
 
 NOMBRE: X {$$=$1;}
-| var {}
+| var {$$=getVal(maListe,$1);}
 | OPERATION {$$=$1;}
 ;
 

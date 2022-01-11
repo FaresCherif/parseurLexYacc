@@ -1712,7 +1712,7 @@ setVarBoucle(maListe,(yyvsp[-2].variable));
 
   case 42:
 #line 170 "dessin.yy"
-      {}
+      {(yyval.num)=getVal(maListe,(yyvsp[0].variable));}
 #line 1717 "y.tab.c"
     break;
 
