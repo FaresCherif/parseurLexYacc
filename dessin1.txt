@@ -1,11 +1,12 @@
-{0,0
+DebutDessin{0,0
 (0,1);
 (1,1);
+DEC x;
 x<-5;
 
 (1,0);
 (0,0);
-:BLEU:;
+Couleur : BLEU;
 (1,1);
 ligne(1,0)(0,1);
 ;
