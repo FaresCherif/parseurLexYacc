@@ -67,6 +67,24 @@ void setVal(Liste *liste,int nvNombre,char*n){
 }
 
 
+int getVal(Liste *liste,char*n){
+        Element *actuel = liste->premier;
+
+        while (actuel != NULL)
+        {
+                //printf("%s\n",actuel->nom);
+                if(strcmp(actuel->nom,n)){
+                        //printf("settage : %s != %s\n",actuel->nom,n);
+                        actuel=actuel->suivant;
+                }
+                else{
+                        //printf("settage : %s = %s\n",actuel->nom,n);
+                        return actuel->nombre;
+                        actuel=actuel->suivant;
+                }
+        }
+	return 0;
+}
 
 
 void setVarBoucle(Liste *liste, char* n){
