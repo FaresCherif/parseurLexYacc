@@ -69,8 +69,9 @@ extern int yydebug;
     parFermant = 275,
     ligne = 276,
     carree = 277,
-    nombreD = 278,
-    var = 279
+    dec = 278,
+    nombreD = 279,
+    var = 280
   };
 #endif
 /* Tokens.  */
@@ -94,19 +95,20 @@ extern int yydebug;
 #define parFermant 275
 #define ligne 276
 #define carree 277
-#define nombreD 278
-#define var 279
+#define dec 278
+#define nombreD 279
+#define var 280
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 14 "dessin.yy"
+#line 28 "dessin.yy"
 
         int num;
 	char *variable;
 
-#line 110 "y.tab.h"
+#line 112 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

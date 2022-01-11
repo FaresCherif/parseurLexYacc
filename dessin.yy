@@ -1,15 +1,29 @@
 %{
 #include <stdio.h>
-int yyerror(const char *s);
-extern FILE *yyin;
+#include "Position.h"
+#include "Variable.h"
+#ifdef  __cplusplus
+extern "C" {
+#endif
+	
+#ifdef  __cplusplus
+}
+#endif
+
 int yylex();
 
-int posX=0;
-int posY=0;
+int yyerror(const char *s);
+extern FILE *yyin;
+
+struct Position p;
+struct Liste *maListe;
+
 char* couleur="noir";
 char** lvar;
 
+
 %}
+
 
 %union {
         int num;
@@ -17,20 +31,20 @@ char** lvar;
 }
 
 %token fin plus moins fois diviser finProgramme baisserCrayon leverCrayon
-%token bleu rouge noir colSymb virgule chevronOuvrant chevronFermant assigne parOuvrant parFermant ligne carree
+%token bleu rouge noir colSymb virgule chevronOuvrant chevronFermant assigne parOuvrant parFermant ligne carree dec
 %token<num> nombreD
 %token<variable> var
 
 %start S
 
-%type<num> DESSIN NOMBRE CALCUL DESSINER COULEUR BOUCLE DEPLACERCRAYON DESSING X OPERATION
-%type<num> DESSINERLIGNE DESSINERCARREE LIGNE CARREE
-%type<variable> VARIABLE
-%type<variable> DECLARERVALEUR
+%type<num> DESSIN NOMBRE CALCUL DESSINER COULEUR BOUCLE SUITEBOUCLE DEPLACERCRAYON DESSING X OPERATION
+%type<num> DESSINERLIGNE DESSINERCARREE LIGNE CARREE 
+%type<variable> VARIABLE DEBUTBOUCLE
+%type<variable> DECLARERVALEUR DEC
 
 %%
 
-S : DESSIN {printf("fin programme\n");return 0;}
+S : DESSIN {printf("fin programme\n\n");afficherListe(maListe);return 0;}
 
 DESSIN : DESSING DESSIN {}
 | fin {}
@@ -39,6 +53,7 @@ DESSIN : DESSING DESSIN {}
 DESSING :
 DEBUTDESSIN DESSINER leverCrayon fin {printf("dessin fini ");}
 | BOUCLE fin {printf("boucle fini\n");}
+| INITVALEUR fin {printf("valeur initialiser\n");}
 | DECLARERVALEUR fin {printf("declarer valeur %s\n",$1);}
 | COULEUR fin {printf("changer couleur\n");}
 
@@ -49,7 +64,13 @@ DESSINERLIGNE :  LIGNE parOuvrant NOMBRE virgule NOMBRE parFermant parOuvrant NO
 
 LIGNE : ligne {printf("ligne\n");}
 
+INITVALEUR : DEC var {printf("valeur initialiser");insertion(maListe,$2);}
+;
+
+DEC : dec {printf("declar");}
+
 DESSINERCARREE : CARREE parOuvrant NOMBRE virgule NOMBRE parFermant parOuvrant NOMBRE virgule NOMBRE parFermant {
+	//visitCarree();
 	printf("trait de %d,%d a %d,%d en %s\n",$3,$5,$8,$5,couleur);
 	printf("trait de %d,%d a %d,%d en %s\n",$8,$5,$8,$10,couleur);
 	printf("trait de %d,%d a %d,%d en %s\n",$8,$10,$3,$10,couleur);
@@ -61,26 +82,57 @@ CARREE : carree{
 }
 
 DEPLACERCRAYON : parOuvrant NOMBRE virgule NOMBRE parFermant {
-	printf("trait de %d,%d a %d,%d en %s\n",posX,posY,$2,$4,couleur);
-	posX=$2;
-	posY=$4;
+	printf("trait de %d,%d a %d,%d en %s\n",p.posX,p.posY,$2,$4,couleur);
+	p.posX=$2;
+	p.posY=$4;
 }
 
 DECLARERVALEUR : VARIABLE assigne NOMBRE {
+	if(!chercherVar(maListe,$1)){
+		yyerror("variable non declare");
+		return 2;
+	}
 
+        if(isVarBoucle(maListe,$1)){
+		printf("variable boucle \n\n");
+		yyerror("affectation a var boucle");
+		return 2;
+	}
+	else{
+		printf("%s n'est pas boucle :\n\n",$1); 
+	}
+	setVal(maListe,$3,$1);
 	printf("variable declare est : %s\n",$1);$$=$1;
 }
 ;
 
 VARIABLE : var {char* v =$1;$$=v;printf("variable est %s\n",$1);}
 
-BOUCLE : chevronOuvrant NOMBRE virgule NOMBRE virgule NOMBRE chevronFermant DESSIN chevronOuvrant chevronFermant {
-printf("boucle");
+DEBUTBOUCLE : chevronOuvrant var virgule NOMBRE virgule NOMBRE chevronFermant {
+printf("boucle sur %s",$2);
+if(!chercherVar(maListe,$2)){
+        return yyerror("variable non initialise");
+        }
+        else{
+                setVarBoucle(maListe,$2);
+        }
+	$$=$2;
+
+}
+;
+
+BOUCLE : DEBUTBOUCLE DESSIN SUITEBOUCLE {
+setVarBoucle(maListe,$1);
+}
+;
+
+SUITEBOUCLE : chevronOuvrant chevronFermant {
+	printf("fin boucle");
 }
 ;
 
 DEBUTDESSIN : baisserCrayon NOMBRE virgule NOMBRE {
-	posX=$2;posY=$4;
+	p.posX=$2;p.posY=$4;
 	printf("Dessin commence a : %d , %d\n",$2,$4);
 }
 ;
@@ -90,13 +142,16 @@ DESSINER : DESSINERG DESSINER {}
 
 DESSINERG :COULEUR fin
 | DEPLACERCRAYON fin {printf("deplacer crayon\n");}
+| INITVALEUR fin {printf("valeur initialiser\n");}
 | DECLARERVALEUR fin {printf("declarer valeur\n");}
 | DESSINERLIGNE fin {printf("ligne dessiner\n");}
 | DESSINERCARREE fin {printf("carree dessiner\n");}
 | fin {}
 ;
 
-COULEUR : colSymb COL colSymb { printf("couleur\n"); }
+COULEUR : colSymb COL colSymb {
+	printf("couleur\n"); 
+}
 
 COL : bleu {printf("bleu\n");couleur="bleu";}
 | rouge {printf("rouge\n");couleur="rouge";}
@@ -117,13 +172,14 @@ NOMBRE: X {$$=$1;}
 ;
 
 X :
-nombreD {$$=$1;}
+nombreD {$$=$1;printf("%d",$1);}
 ;
 
 %%
 
 int main(int argc, char *argv[])
 {
+	maListe = initialisation();
 	printf("Application dessin \n");
 	yyin=fopen(argv[1],"r+");
 	if(yyin==NULL)

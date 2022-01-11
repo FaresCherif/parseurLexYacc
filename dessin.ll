@@ -4,6 +4,8 @@
 %}
 
 %%
+
+"["	return(dec);
 "carree"	return(carree);
 "ligne"	return(ligne);
 "("	return(parOuvrant);
