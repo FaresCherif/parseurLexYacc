@@ -5,19 +5,17 @@
 
 %%
 
-"["	return(dec);
+"DEC "	return(dec);
 "carree"	return(carree);
 "ligne"	return(ligne);
 "("	return(parOuvrant);
 ")"	return(parFermant);
 "<-"	return(assigne);
-"<"	return(chevronOuvrant);
-">"	return(chevronFermant);
+"Boucle("	return(chevronOuvrant);
 ","	return(virgule);
-":"	return(colSymb);
-"!"	return(finProgramme);
+"Couleur : "	return(colSymb);
 ";"	return(fin);
-"{"	return(baisserCrayon);
+"DebutDessin{"	return(baisserCrayon);
 "}"	return(leverCrayon);
 "+"	return(plus);
 "-"	return(moins);

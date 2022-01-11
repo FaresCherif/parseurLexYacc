@@ -30,8 +30,8 @@ char** lvar;
 	char *variable;
 }
 
-%token fin plus moins fois diviser finProgramme baisserCrayon leverCrayon
-%token bleu rouge noir colSymb virgule chevronOuvrant chevronFermant assigne parOuvrant parFermant ligne carree dec
+%token fin plus moins fois diviser baisserCrayon leverCrayon
+%token bleu rouge noir colSymb virgule chevronOuvrant assigne parOuvrant parFermant ligne carree dec
 %token<num> nombreD
 %token<variable> var
 
@@ -108,7 +108,7 @@ DECLARERVALEUR : VARIABLE assigne NOMBRE {
 
 VARIABLE : var {char* v =$1;$$=v;printf("variable est %s\n",$1);}
 
-DEBUTBOUCLE : chevronOuvrant var virgule NOMBRE virgule NOMBRE chevronFermant {
+DEBUTBOUCLE : chevronOuvrant var virgule NOMBRE virgule NOMBRE parFermant {
 printf("boucle sur %s",$2);
 if(!chercherVar(maListe,$2)){
         return yyerror("variable non initialise");
@@ -126,8 +126,8 @@ setVarBoucle(maListe,$1);
 }
 ;
 
-SUITEBOUCLE : chevronOuvrant chevronFermant {
-	printf("fin boucle");
+SUITEBOUCLE : {
+	printf("fin boucle\n");
 }
 ;
 
@@ -149,7 +149,7 @@ DESSINERG :COULEUR fin
 | fin {}
 ;
 
-COULEUR : colSymb COL colSymb {
+COULEUR : colSymb COL {
 	printf("couleur\n"); 
 }
 

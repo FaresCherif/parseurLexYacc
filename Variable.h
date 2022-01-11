@@ -53,13 +53,13 @@ void setVal(Liste *liste,int nvNombre,char*n){
 
         while (actuel != NULL)
         {
-                printf("%s\n",actuel->nom);
+                //printf("%s\n",actuel->nom);
                 if(strcmp(actuel->nom,n)){
-                        printf("settage : %s != %s\n",actuel->nom,n);
+                        //printf("settage : %s != %s\n",actuel->nom,n);
                         actuel=actuel->suivant;
                 }
                 else{
-                        printf("settage : %s = %s\n",actuel->nom,n);
+                        //printf("settage : %s = %s\n",actuel->nom,n);
                      	actuel->nombre=nvNombre;
                         actuel=actuel->suivant;
                 }
@@ -74,13 +74,13 @@ void setVarBoucle(Liste *liste, char* n){
 
     	while (actuel != NULL)
     	{
-        	printf("%s\n",actuel->nom);
+        	//printf("%s\n",actuel->nom);
         	if(strcmp(actuel->nom,n)){
-			printf("settage : %s != %s\n",actuel->nom,n);
+			//printf("settage : %s != %s\n",actuel->nom,n);
                		actuel=actuel->suivant;
         	}
         	else{
-			printf("settage : %s = %s\n",actuel->nom,n);
+			//printf("settage : %s = %s\n",actuel->nom,n);
 			if(actuel->varBoucle==false){
 				actuel->varBoucle=true;
 			}
@@ -98,13 +98,13 @@ bool isVarBoucle(Liste *liste, char* n){
 
         while (actuel != NULL)
         {
-                printf("%s\n",actuel->nom);
+                //printf("%s\n",actuel->nom);
                 if(strcmp(actuel->nom,n)){
-                        printf("varBoucle : %s != %s\n",actuel->nom,n);
+                        //printf("varBoucle : %s != %s\n",actuel->nom,n);
                         actuel=actuel->suivant;
                 }
                 else{
-                        printf("varboucle : %s = %s %d\n",actuel->nom,n,actuel->varBoucle);
+                        //printf("varboucle : %s = %s %d\n",actuel->nom,n,actuel->varBoucle);
                         if(actuel->varBoucle==true){
                                 return true;
                         }
@@ -120,21 +120,21 @@ void afficherListe(Liste *liste)
 
     while (actuel != NULL)
     {
-        printf("%s = %d , %d\n",actuel->nom,actuel->nombre,actuel->varBoucle);
+        //printf("%s = %d , %d\n",actuel->nom,actuel->nombre,actuel->varBoucle);
         actuel = actuel->suivant;
     }
 }
 
 bool chercherVar(Liste *liste, char* n)
 {
-	printf("var checher est %s\n",n);
+	//printf("var checher est %s\n",n);
     Element *actuel = liste->premier;
 
     while (actuel != NULL)
     {
-	printf("%s\n",actuel->nom);
+	//printf("%s\n",actuel->nom);
 	if(strcmp(actuel->nom,n)){
-		printf("%s != %s\n",actuel->nom,n);
+		//printf("%s != %s\n",actuel->nom,n);
 		actuel=actuel->suivant;
 	}
 	else{

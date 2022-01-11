@@ -54,24 +54,22 @@ extern int yydebug;
     moins = 260,
     fois = 261,
     diviser = 262,
-    finProgramme = 263,
-    baisserCrayon = 264,
-    leverCrayon = 265,
-    bleu = 266,
-    rouge = 267,
-    noir = 268,
-    colSymb = 269,
-    virgule = 270,
-    chevronOuvrant = 271,
-    chevronFermant = 272,
-    assigne = 273,
-    parOuvrant = 274,
-    parFermant = 275,
-    ligne = 276,
-    carree = 277,
-    dec = 278,
-    nombreD = 279,
-    var = 280
+    baisserCrayon = 263,
+    leverCrayon = 264,
+    bleu = 265,
+    rouge = 266,
+    noir = 267,
+    colSymb = 268,
+    virgule = 269,
+    chevronOuvrant = 270,
+    assigne = 271,
+    parOuvrant = 272,
+    parFermant = 273,
+    ligne = 274,
+    carree = 275,
+    dec = 276,
+    nombreD = 277,
+    var = 278
   };
 #endif
 /* Tokens.  */
@@ -80,24 +78,22 @@ extern int yydebug;
 #define moins 260
 #define fois 261
 #define diviser 262
-#define finProgramme 263
-#define baisserCrayon 264
-#define leverCrayon 265
-#define bleu 266
-#define rouge 267
-#define noir 268
-#define colSymb 269
-#define virgule 270
-#define chevronOuvrant 271
-#define chevronFermant 272
-#define assigne 273
-#define parOuvrant 274
-#define parFermant 275
-#define ligne 276
-#define carree 277
-#define dec 278
-#define nombreD 279
-#define var 280
+#define baisserCrayon 263
+#define leverCrayon 264
+#define bleu 265
+#define rouge 266
+#define noir 267
+#define colSymb 268
+#define virgule 269
+#define chevronOuvrant 270
+#define assigne 271
+#define parOuvrant 272
+#define parFermant 273
+#define ligne 274
+#define carree 275
+#define dec 276
+#define nombreD 277
+#define var 278
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -108,7 +104,7 @@ union YYSTYPE
         int num;
 	char *variable;
 
-#line 112 "y.tab.h"
+#line 108 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
