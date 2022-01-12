@@ -138,7 +138,7 @@ void afficherListe(Liste *liste)
 
     while (actuel != NULL)
     {
-        //printf("%s = %d , %d\n",actuel->nom,actuel->nombre,actuel->varBoucle);
+        printf("%s = %d , %d\n",actuel->nom,actuel->nombre,actuel->varBoucle);
         actuel = actuel->suivant;
     }
 }

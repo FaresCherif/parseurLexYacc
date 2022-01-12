@@ -20,7 +20,7 @@ struct Liste *maListe;
 
 char* couleur="noir";
 char** lvar;
-
+int lancerParseur(char* s);
 
 %}
 
@@ -37,9 +37,9 @@ char** lvar;
 
 %start S
 
-%type<num> DESSIN NOMBRE CALCUL DESSINER COULEUR BOUCLE SUITEBOUCLE DEPLACERCRAYON DESSING X OPERATION
-%type<num> DESSINERLIGNE DESSINERCARREE LIGNE CARREE 
-%type<variable> VARIABLE DEBUTBOUCLE
+%type<num> DESSIN NOMBRE CALCUL DESSINER COULEUR BOUCLE FINBOUCLE DEPLACERCRAYON DESSING X OPERATION
+%type<num> DESSINERLIGNE DESSINERCARREE LIGNE CARREE BOUCLEVALFINAL
+%type<variable> VARIABLE BOUCLEVAR
 %type<variable> DECLARERVALEUR DEC
 
 %%
@@ -108,25 +108,38 @@ DECLARERVALEUR : VARIABLE assigne NOMBRE {
 
 VARIABLE : var {char* v =$1;$$=v;printf("variable est %s\n",$1);}
 
-DEBUTBOUCLE : chevronOuvrant var virgule NOMBRE virgule NOMBRE parFermant {
+BOUCLEVAR : chevronOuvrant var virgule NOMBRE virgule {
 printf("boucle sur %s",$2);
 if(!chercherVar(maListe,$2)){
         return yyerror("variable non initialise");
         }
         else{
                 setVarBoucle(maListe,$2);
+		setVal(maListe,$4,$2);
         }
+	
 	$$=$2;
-
 }
 ;
 
-BOUCLE : DEBUTBOUCLE DESSIN SUITEBOUCLE {
+
+
+BOUCLEVALFINAL : NOMBRE parFermant {$$=$1;}
+
+BOUCLE : BOUCLEVAR BOUCLEVALFINAL DESSIN FINBOUCLE {
+
+printf("%d <= %d",getVal(maListe,$1),$2);
+
+if(getVal(maListe,$1)>=$2){
+	yyerror("boucle negative ou null");
+       	return 2;
+}
 setVarBoucle(maListe,$1);
+setVal(maListe,$2,$1);
 }
 ;
 
-SUITEBOUCLE : {
+FINBOUCLE : {
 	printf("fin boucle\n");
 }
 ;
@@ -179,20 +192,25 @@ nombreD {$$=$1;printf("%d",$1);}
 
 int main(int argc, char *argv[])
 {
-	maListe = initialisation();
-	printf("Application dessin \n");
-	yyin=fopen(argv[1],"r+");
-	if(yyin==NULL)
-	{
-		printf("\n Error ! \n");
-		return 1;
-	}
-	else 
-	{
-		yyparse();
-		return 0;
-	}
+	lancerParseur(argv[1]);
 }
+
+int lancerParseur(char* fichier){
+	maListe = initialisation();
+        printf("Application dessin \n");
+        yyin=fopen(fichier,"r+");
+        if(yyin==NULL)
+        {
+                printf("\n Error ! \n");
+                return 1;
+        }
+        else
+        {
+                yyparse();
+                return 0;
+        }
+}
+
 
 int yyerror(s)
 const char *s;
