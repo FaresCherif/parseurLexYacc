@@ -20,16 +20,14 @@ struct Liste
 };
 
 
-
-
 Liste *initialisation()
 {
-    Liste *liste = malloc(sizeof(*liste));
-    Element *element = malloc(sizeof(*element));
+    Liste *liste = (Liste *)malloc(sizeof(*liste));
+    Element *element = (Element *)malloc(sizeof(*element));
 
     bool varBoucle=false;
     element->nombre = 0;
-    element->nom="debut de liste";
+    element->nom=(char*)"debut de liste";
     element->suivant = NULL;
     liste->premier = element;
 
@@ -39,7 +37,7 @@ Liste *initialisation()
 void insertion(Liste *liste, char* n)
 {
     
-    Element *nouveau = malloc(sizeof(*nouveau));
+    Element *nouveau = (Element *)malloc(sizeof(*nouveau));
 
     nouveau->nombre = 0;
     nouveau->nom = n;
@@ -138,7 +136,7 @@ void afficherListe(Liste *liste)
 
     while (actuel != NULL)
     {
-        //printf("%s = %d , %d\n",actuel->nom,actuel->nombre,actuel->varBoucle);
+        printf("%s = %d , %d\n",actuel->nom,actuel->nombre,actuel->varBoucle);
         actuel = actuel->suivant;
     }
 }
@@ -164,25 +162,4 @@ bool chercherVar(Liste *liste, char* n)
 	return false;
 
 }
-
-
-/*
-int main()
-{
-    Liste *maListe = initialisation();
-
-    insertion(maListe, 4,"x");
-    insertion(maListe, 8,"y");
-    insertion(maListe, 15,"test");
-	chercherVar(maListe,"test");
-	chercherVar(maListe,"x");
-	chercherVar(maListe,"y");
-	chercherVar(maListe,"a");
-    afficherListe(maListe);
-
-    return 0;
-}
-*/
-
-
 

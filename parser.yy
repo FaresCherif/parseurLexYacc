@@ -1,50 +1,73 @@
 %{
+ /* Fais un copier coller dans le fichier parser.tab.hh */
+#include <iostream>
+#include "printer.hh"	
 #include <stdio.h>
 #include "Position.h"
 #include "Variable.h"
-#ifdef  __cplusplus
-extern "C" {
-#endif
-	
-#ifdef  __cplusplus
-}
-#endif
 
-int yylex();
+using namespace std;
+int lancerParseur(char* s);
+void yyerror(const char *s) { std::cerr<<"ERREUR: "<<s<<std::endl; }
+extern int yylex();
+int lancerParse(char *s);
 
-int yyerror(const char *s);
 extern FILE *yyin;
 
 struct Position p;
 struct Liste *maListe;
 
-char* couleur="noir";
+char* couleur=(char*)"noir";
 char** lvar;
 
+bool chercherVar(Liste*,char*);
+
+void afficherListe(Liste *);
+
+bool isVarBoucle(Liste *, char* );
+void setVarBoucle(Liste *, char* );
+int getVal(Liste *,char*);
+void setVal(Liste *,int ,char*);
+void insertion(Liste *, char* );
+
+Liste *initialisation();
 
 %}
+
+
+
+%code requires {
+  /* Fais un copier coller dans le fichier parser.tab.cc */
+  #include "printer.hh"
+
+}
 
 
 %union {
         int num;
 	char *variable;
+	Instruction* instr;
+	Expression* expr;
 }
 
-%token fin plus moins fois diviser baisserCrayon leverCrayon
-%token bleu rouge noir colSymb virgule chevronOuvrant assigne parOuvrant parFermant ligne carree dec
+%token fin plu moins fois diviser baisserCrayon leverCrayon debut
+%token bleu rouge noir colSymb virgule chevronOuvrant assigne parOuvrant parFermant ligne carree decla
 %token<num> nombreD
 %token<variable> var
 
 %start S
 
-%type<num> DESSIN NOMBRE CALCUL DESSINER COULEUR BOUCLE SUITEBOUCLE DEPLACERCRAYON DESSING X OPERATION
-%type<num> DESSINERLIGNE DESSINERCARREE LIGNE CARREE 
-%type<variable> VARIABLE DEBUTBOUCLE
+%type<num> DESSIN NOMBRE CALCUL DESSINER COULEUR BOUCLE FINBOUCLE DEPLACERCRAYON DESSING X OPERATION
+%type<num> DESSINERLIGNE DESSINERCARREE LIGNE CARREE BOUCLEVALFINAL
+%type<variable> VARIABLE BOUCLEVAR
 %type<variable> DECLARERVALEUR DEC
+%type<instr> INITVALEUR 
 
 %%
 
-S : DESSIN {printf("fin programme\n\n");afficherListe(maListe);return 0;}
+S : DEBUTPROGRAMME DESSIN {printf("fin programme\n\n");afficherListe(maListe);return 0;}
+
+DEBUTPROGRAMME : debut {maListe = initialisation();}
 
 DESSIN : DESSING DESSIN {}
 | fin {}
@@ -64,10 +87,10 @@ DESSINERLIGNE :  LIGNE parOuvrant NOMBRE virgule NOMBRE parFermant parOuvrant NO
 
 LIGNE : ligne {printf("ligne\n");}
 
-INITVALEUR : DEC var {printf("valeur initialiser");insertion(maListe,$2);}
+INITVALEUR : DEC var {printf("valeur initialiser");insertion(maListe,$2); $$ = new Decl($2); free($2);}
 ;
 
-DEC : dec {printf("declar");}
+DEC : decla {printf("declar");}
 
 DESSINERCARREE : CARREE parOuvrant NOMBRE virgule NOMBRE parFermant parOuvrant NOMBRE virgule NOMBRE parFermant {
 	//visitCarree();
@@ -108,25 +131,39 @@ DECLARERVALEUR : VARIABLE assigne NOMBRE {
 
 VARIABLE : var {char* v =$1;$$=v;printf("variable est %s\n",$1);}
 
-DEBUTBOUCLE : chevronOuvrant var virgule NOMBRE virgule NOMBRE parFermant {
+BOUCLEVAR : chevronOuvrant var virgule NOMBRE virgule {
 printf("boucle sur %s",$2);
 if(!chercherVar(maListe,$2)){
-        return yyerror("variable non initialise");
+        yyerror("variable non initialise");
+	return 2;
         }
         else{
                 setVarBoucle(maListe,$2);
+		setVal(maListe,$4,$2);
         }
+	
 	$$=$2;
-
 }
 ;
 
-BOUCLE : DEBUTBOUCLE DESSIN SUITEBOUCLE {
+
+
+BOUCLEVALFINAL : NOMBRE parFermant {$$=$1;}
+
+BOUCLE : BOUCLEVAR BOUCLEVALFINAL DESSIN FINBOUCLE {
+
+printf("%d <= %d",getVal(maListe,$1),$2);
+
+if(getVal(maListe,$1)>=$2){
+	yyerror("boucle negative ou null");
+       	return 2;
+}
 setVarBoucle(maListe,$1);
+setVal(maListe,$2,$1);
 }
 ;
 
-SUITEBOUCLE : {
+FINBOUCLE : {
 	printf("fin boucle\n");
 }
 ;
@@ -153,14 +190,14 @@ COULEUR : colSymb COL {
 	printf("couleur\n"); 
 }
 
-COL : bleu {printf("bleu\n");couleur="bleu";}
-| rouge {printf("rouge\n");couleur="rouge";}
-| noir {printf("noir\n");couleur="noir";}
+COL : bleu {printf("bleu\n");couleur=(char*)"bleu";}
+| rouge {printf("rouge\n");couleur=(char*)"rouge";}
+| noir {printf("noir\n");couleur=(char*)"noir";}
 ;
 
 OPERATION : parOuvrant CALCUL parFermant {$$=$2;}
 
-CALCUL : NOMBRE plus NOMBRE { printf("%d + %d\n",$1,$3);$$=$1+$3;}
+CALCUL : NOMBRE plu NOMBRE { printf("%d + %d\n",$1,$3);$$=$1+$3;}
 | NOMBRE moins NOMBRE { printf("%d - %d\n",$1,$3);$$=$1-$3;}
 | NOMBRE fois NOMBRE { printf("%d * %d\n",$1,$3);$$=$1*$3;}
 | NOMBRE diviser NOMBRE { printf("%d / %d\n",$1,$3);$$=$1/$3;}
@@ -177,31 +214,31 @@ nombreD {$$=$1;printf("%d",$1);}
 
 %%
 
-int main(int argc, char *argv[])
-{
+int lancerParse(char* fichier){
 	maListe = initialisation();
-	printf("Application dessin \n");
-	yyin=fopen(argv[1],"r+");
-	if(yyin==NULL)
-	{
-		printf("\n Error ! \n");
-		return 1;
-	}
-	else 
-	{
-		yyparse();
-		return 0;
-	}
+        printf("Application dessin \n");
+        yyin=fopen(fichier,"r+");
+        if(yyin==NULL)
+        {
+                printf("\n Error ! \n");
+                return 1;
+        }
+        else
+        {
+                yyparse();
+                return 0;
+        }
 }
 
-int yyerror(s)
-const char *s;
-{
-	fprintf(stderr, "%s\n",s);
-	return(2);
-}
 
-int yywrap()
-{
-	return(1);
-}
+
+
+
+
+
+
+
+
+
+
+

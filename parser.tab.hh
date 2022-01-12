@@ -34,8 +34,8 @@
 /* Undocumented macros, especially those whose name start with YY_,
    are private implementation details.  Do not rely on them.  */
 
-#ifndef YY_YY_Y_TAB_H_INCLUDED
-# define YY_YY_Y_TAB_H_INCLUDED
+#ifndef YY_YY_PARSER_TAB_HH_INCLUDED
+# define YY_YY_PARSER_TAB_HH_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -43,6 +43,14 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
+/* "%code requires" blocks.  */
+#line 39 "parser.yy"
+
+  /* Fais un copier coller dans le fichier parser.tab.cc */
+  #include "printer.hh"
+
+
+#line 54 "parser.tab.hh"
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -50,61 +58,42 @@ extern int yydebug;
   enum yytokentype
   {
     fin = 258,
-    plus = 259,
+    plu = 259,
     moins = 260,
     fois = 261,
     diviser = 262,
     baisserCrayon = 263,
     leverCrayon = 264,
-    bleu = 265,
-    rouge = 266,
-    noir = 267,
-    colSymb = 268,
-    virgule = 269,
-    chevronOuvrant = 270,
-    assigne = 271,
-    parOuvrant = 272,
-    parFermant = 273,
-    ligne = 274,
-    carree = 275,
-    dec = 276,
-    nombreD = 277,
-    var = 278
+    debut = 265,
+    bleu = 266,
+    rouge = 267,
+    noir = 268,
+    colSymb = 269,
+    virgule = 270,
+    chevronOuvrant = 271,
+    assigne = 272,
+    parOuvrant = 273,
+    parFermant = 274,
+    ligne = 275,
+    carree = 276,
+    decla = 277,
+    nombreD = 278,
+    var = 279
   };
 #endif
-/* Tokens.  */
-#define fin 258
-#define plus 259
-#define moins 260
-#define fois 261
-#define diviser 262
-#define baisserCrayon 263
-#define leverCrayon 264
-#define bleu 265
-#define rouge 266
-#define noir 267
-#define colSymb 268
-#define virgule 269
-#define chevronOuvrant 270
-#define assigne 271
-#define parOuvrant 272
-#define parFermant 273
-#define ligne 274
-#define carree 275
-#define dec 276
-#define nombreD 277
-#define var 278
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 28 "dessin.yy"
+#line 46 "parser.yy"
 
         int num;
 	char *variable;
+	Instruction* instr;
+	Expression* expr;
 
-#line 108 "y.tab.h"
+#line 97 "parser.tab.hh"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -117,4 +106,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_Y_TAB_H_INCLUDED  */
+#endif /* !YY_YY_PARSER_TAB_HH_INCLUDED  */
