@@ -39,6 +39,10 @@ void Printer::visitAffect(const Affect *a) {
   cout<<";"<<endl;
 }
 
+void Printer::visitCouleur(const Couleur *c){
+  cout<<"visite couleur";
+}
+
 void Printer::visitBlock(const Block *b) {
   cout<<"{"<<endl;
   b->getBody()->visit(*this);
@@ -60,17 +64,31 @@ void Printer::visitDecl(const Decl *d) {
 
 void Printer::visitWhile(const While *w) {
   cout<<"while(";
-  w->getCond()->visit(*this);
+  w->getVar();
+  cout<<"<",
+  w->getMax()->visit(*this);
   cout<<")"<<endl;
   w->getBody()->visit(*this);
 }
 
+void Printer::visitLigne(const Ligne *l) {
+  cout<<"trace ligne de : "<<l->getX1()->getValue()<<","<<l->getY1()->getValue()<<" a "<<l->getX2()->getValue()<<" "<<l->getY2()->getValue();
+}
+
+void Printer::visitCarree(const Carree *c){
+	c->getL1()->visit(*this);
+c->getL2()->visit(*this);
+c->getL3()->visit(*this);
+c->getL4()->visit(*this);
+}
+
 void Printer::visitSeq(const Sequence *s) {
-  cout<<"ATTENTION Inversion possible (en fct de votre algo)!"<<endl;
+  //cout<<"ATTENTION Inversion possible (en fct de votre algo)!"<<endl;
   SeqItem *t = s->getFirst();
   while(t != NULL) {
     t->getInst()->visit(*this);
+    printf("sequence");
     t = t->getNext();
   }
-  cout<<"ATTENTION Inversion possible (en fct de votre algo)!"<<endl;
+  //cout<<"ATTENTION Inversion possible (en fct de votre algo)!"<<endl;
 }

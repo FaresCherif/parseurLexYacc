@@ -12,7 +12,9 @@
 #include "var.hh"
 #include "ope.hh"
 #include "seq.hh"
-
+#include "ligne.hh"
+#include "carree.hh"
+#include "couleur.hh"
 
 class Printer : public Visitor {
 public:
@@ -25,6 +27,9 @@ public:
   void visitDecl(const Decl *d);
   void visitWhile(const While *w);
   void visitSeq(const Sequence *s);
+  void visitLigne(const Ligne *l);
+  void visitCarree(const Carree *c);
+  void visitCouleur(const Couleur *c);
 };
 
 

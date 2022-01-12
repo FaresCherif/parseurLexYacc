@@ -1,13 +1,14 @@
 #include "while.hh"
 
-While::While(Expression *cond, Instruction *body)
-  : cond(cond),body(body)
+While::While(string var, Instruction *body,Expression* min,Expression* max)
+  : var(var),body(body),min(min),max(max)
 {
 }
 
 While::~While() {
-  delete cond;
   delete body;
+  delete min;
+  delete max;
 }
 
 

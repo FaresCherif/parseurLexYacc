@@ -100,9 +100,10 @@ void setVal(Liste *,int ,char*);
 void insertion(Liste *, char* );
 
 Liste *initialisation();
+Printer printer;
 
 
-#line 106 "parser.tab.cc"
+#line 107 "parser.tab.cc"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -145,13 +146,13 @@ Liste *initialisation();
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 39 "parser.yy"
+#line 40 "parser.yy"
 
   /* Fais un copier coller dans le fichier parser.tab.cc */
   #include "printer.hh"
 
 
-#line 155 "parser.tab.cc"
+#line 156 "parser.tab.cc"
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -187,14 +188,18 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 46 "parser.yy"
+#line 47 "parser.yy"
 
         int num;
 	char *variable;
 	Instruction* instr;
 	Expression* expr;
+	Carree*  care;
+	Ligne* lign;
+	Affect* af;
+	Couleur* col;
 
-#line 198 "parser.tab.cc"
+#line 203 "parser.tab.cc"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -569,13 +574,13 @@ static const yytype_int8 yytranslate[] =
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] =
+static const yytype_int16 yyrline[] =
 {
-       0,    68,    68,    70,    72,    73,    77,    78,    79,    80,
-      81,    83,    88,    90,    93,    95,   103,   107,   113,   132,
-     134,   151,   153,   166,   171,   177,   178,   180,   181,   182,
-     183,   184,   185,   186,   189,   193,   194,   195,   198,   200,
-     201,   202,   203,   206,   207,   208,   212
+       0,    75,    75,    82,    84,    91,    95,    98,   100,   102,
+     106,   112,   127,   131,   137,   141,   161,   165,   184,   210,
+     214,   231,   233,   252,   257,   263,   267,   271,   272,   275,
+     278,   281,   284,   287,   290,   295,   298,   301,   306,   308,
+     316,   324,   333,   343,   344,   345,   349
 };
 #endif
 
@@ -1427,147 +1432,220 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 68 "parser.yy"
-                          {printf("fin programme\n\n");afficherListe(maListe);return 0;}
-#line 1433 "parser.tab.cc"
+#line 75 "parser.yy"
+                          {/*printf("fin programme\n\n")*/;afficherListe(maListe);
+	Sequence* s = new Sequence((yyvsp[0].instr));
+
+
+
+YYACCEPT;}
+#line 1443 "parser.tab.cc"
     break;
 
   case 3:
-#line 70 "parser.yy"
+#line 82 "parser.yy"
                        {maListe = initialisation();}
-#line 1439 "parser.tab.cc"
+#line 1449 "parser.tab.cc"
     break;
 
   case 4:
-#line 72 "parser.yy"
-                        {}
-#line 1445 "parser.tab.cc"
+#line 84 "parser.yy"
+                        {  
+Sequence* s = new Sequence((yyvsp[-1].instr));
+s->add((yyvsp[0].instr));
+ (yyval.instr) = s;
+
+
+}
+#line 1461 "parser.tab.cc"
     break;
 
   case 5:
-#line 73 "parser.yy"
+#line 91 "parser.yy"
       {}
-#line 1451 "parser.tab.cc"
+#line 1467 "parser.tab.cc"
     break;
 
   case 6:
-#line 77 "parser.yy"
-                                     {printf("dessin fini ");}
-#line 1457 "parser.tab.cc"
-    break;
-
-  case 7:
-#line 78 "parser.yy"
-             {printf("boucle fini\n");}
-#line 1463 "parser.tab.cc"
-    break;
-
-  case 8:
-#line 79 "parser.yy"
-                 {printf("valeur initialiser\n");}
-#line 1469 "parser.tab.cc"
-    break;
-
-  case 9:
-#line 80 "parser.yy"
-                     {printf("declarer valeur %s\n",(yyvsp[-1].variable));}
+#line 95 "parser.yy"
+                                     {/*printf("dessin fini ")*/;
+(yyval.instr)=(yyvsp[-2].instr);
+}
 #line 1475 "parser.tab.cc"
     break;
 
-  case 10:
-#line 81 "parser.yy"
-              {printf("changer couleur\n");}
-#line 1481 "parser.tab.cc"
+  case 7:
+#line 98 "parser.yy"
+             {/* printf("boucle fini\n") */ ;(yyval.instr)=(yyvsp[-1].instr);
+}
+#line 1482 "parser.tab.cc"
     break;
 
-  case 11:
-#line 83 "parser.yy"
-                                                                                                               {
-	printf("trait de %d,%d a %d,%d en %s\n",(yyvsp[-8].num),(yyvsp[-6].num),(yyvsp[-3].num),(yyvsp[-1].num),couleur);
+  case 8:
+#line 100 "parser.yy"
+                 {/* printf("valeur initialiser\n") */;(yyval.instr)=(yyvsp[-1].instr);
 }
 #line 1489 "parser.tab.cc"
     break;
 
+  case 9:
+#line 102 "parser.yy"
+                     {
+//printf("declarer valeur \n");
+(yyval.instr)=(yyvsp[-1].instr);
+}
+#line 1498 "parser.tab.cc"
+    break;
+
+  case 10:
+#line 106 "parser.yy"
+              {
+//printf("changer couleur\n");
+
+(yyval.instr)=(yyvsp[-1].instr);
+}
+#line 1508 "parser.tab.cc"
+    break;
+
+  case 11:
+#line 112 "parser.yy"
+                                                                                                               {
+	//printf("trait de %d,%d a %d,%d en %s\n",$3,$5,$8,$10,couleur);
+	Float* x1= new Float((yyvsp[-8].num));
+	Float* x2=new Float((yyvsp[-3].num));
+	Float* y1 = new Float((yyvsp[-6].num));
+	Float* y2 = new Float((yyvsp[-1].num));
+	Ligne* l1 = new Ligne(x1,y1,x2,y1);
+	
+	(yyval.instr)=l1;	
+
+
+ 	l1->visit(printer);
+}
+#line 1526 "parser.tab.cc"
+    break;
+
   case 12:
-#line 88 "parser.yy"
-              {printf("ligne\n");}
-#line 1495 "parser.tab.cc"
+#line 127 "parser.yy"
+              {
+//printf("ligne\n");
+}
+#line 1534 "parser.tab.cc"
     break;
 
   case 13:
-#line 90 "parser.yy"
-                     {printf("valeur initialiser");insertion(maListe,(yyvsp[0].variable)); (yyval.instr) = new Decl((yyvsp[0].variable)); free((yyvsp[0].variable));}
-#line 1501 "parser.tab.cc"
+#line 131 "parser.yy"
+                     {
+//printf("val initialise : %s",$2);
+//printf("valeur initialiser");
+insertion(maListe,(yyvsp[0].variable)); (yyval.instr) = new Decl((yyvsp[0].variable)); }
+#line 1543 "parser.tab.cc"
     break;
 
   case 14:
-#line 93 "parser.yy"
-            {printf("declar");}
-#line 1507 "parser.tab.cc"
+#line 137 "parser.yy"
+            {
+//printf("declar");
+}
+#line 1551 "parser.tab.cc"
     break;
 
   case 15:
-#line 95 "parser.yy"
+#line 141 "parser.yy"
                                                                                                                 {
 	//visitCarree();
-	printf("trait de %d,%d a %d,%d en %s\n",(yyvsp[-8].num),(yyvsp[-6].num),(yyvsp[-3].num),(yyvsp[-6].num),couleur);
-	printf("trait de %d,%d a %d,%d en %s\n",(yyvsp[-3].num),(yyvsp[-6].num),(yyvsp[-3].num),(yyvsp[-1].num),couleur);
-	printf("trait de %d,%d a %d,%d en %s\n",(yyvsp[-3].num),(yyvsp[-1].num),(yyvsp[-8].num),(yyvsp[-1].num),couleur);
-	printf("trait de %d,%d a %d,%d en %s\n",(yyvsp[-8].num),(yyvsp[-1].num),(yyvsp[-8].num),(yyvsp[-6].num),couleur);
+	//printf("trait de %d,%d a %d,%d en %s\n",$3,$5,$8,$5,couleur);
+	//printf("trait de %d,%d a %d,%d en %s\n",$8,$5,$8,$10,couleur);
+	//printf("trait de %d,%d a %d,%d en %s\n",$8,$10,$3,$10,couleur);
+	//printf("trait de %d,%d a %d,%d en %s\n",$3,$10,$3,$5,couleur);
+	Float* x1= new Float((yyvsp[-8].num));
+	Float* x2=new Float((yyvsp[-3].num));
+	Float* y1 = new Float((yyvsp[-6].num));
+	Float* y2 = new Float((yyvsp[-1].num));
+	Ligne* l1 = new Ligne(x1,y1,x2,y1);
+	Ligne* l2 = new Ligne(x2,y1,x2,y2);
+	Ligne* l3 = new Ligne(x2,y1,x1,y2);
+	Ligne* l4 = new Ligne(x1,y2,x1,y1);
+	Carree *c = new Carree(l1,l2,l3,l4);
+
+	(yyval.instr)=c;
+	
 }
-#line 1519 "parser.tab.cc"
+#line 1575 "parser.tab.cc"
     break;
 
   case 16:
-#line 103 "parser.yy"
+#line 161 "parser.yy"
                {
-	printf("carree\n");
+	//printf("carree\n");
 }
-#line 1527 "parser.tab.cc"
+#line 1583 "parser.tab.cc"
     break;
 
   case 17:
-#line 107 "parser.yy"
+#line 165 "parser.yy"
                                                              {
-	printf("trait de %d,%d a %d,%d en %s\n",p.posX,p.posY,(yyvsp[-3].num),(yyvsp[-1].num),couleur);
+	//printf("trait de %d,%d a %d,%d en %s\n",p.posX,p.posY,$2,$4,couleur);
+
+	Float* x1= new Float(p.posX);
+	Float* x2=new Float((yyvsp[-3].num));
+	Float* y1 = new Float(p.posY);
+	Float* y2 = new Float((yyvsp[-1].num));
+
+	Ligne* l1 = new Ligne(x1,y1,x2,y1);
+	
+
 	p.posX=(yyvsp[-3].num);
 	p.posY=(yyvsp[-1].num);
+
+	(yyval.instr)=l1;
+
+l1->visit(printer);
 }
-#line 1537 "parser.tab.cc"
+#line 1606 "parser.tab.cc"
     break;
 
   case 18:
-#line 113 "parser.yy"
+#line 184 "parser.yy"
                                          {
+	//printf("val declarer %s",$1);
 	if(!chercherVar(maListe,(yyvsp[-2].variable))){
 		yyerror("variable non declare");
 		return 2;
 	}
 
         if(isVarBoucle(maListe,(yyvsp[-2].variable))){
-		printf("variable boucle \n\n");
+		//printf("variable boucle \n\n");
 		yyerror("affectation a var boucle");
 		return 2;
 	}
 	else{
-		printf("%s n'est pas boucle :\n\n",(yyvsp[-2].variable)); 
+		//printf("%s n'est pas boucle :\n\n",$1); 
 	}
+	Float* f = new Float((yyvsp[0].num));
+	Affect* a = new Affect((yyvsp[-2].variable),f);
+
 	setVal(maListe,(yyvsp[0].num),(yyvsp[-2].variable));
-	printf("variable declare est : %s\n",(yyvsp[-2].variable));(yyval.variable)=(yyvsp[-2].variable);
+	
+	//printf("variable declare est : %s\n",$1);
+	
+	(yyval.instr)=a;
 }
-#line 1559 "parser.tab.cc"
+#line 1635 "parser.tab.cc"
     break;
 
   case 19:
-#line 132 "parser.yy"
-               {char* v =(yyvsp[0].variable);(yyval.variable)=v;printf("variable est %s\n",(yyvsp[0].variable));}
-#line 1565 "parser.tab.cc"
+#line 210 "parser.yy"
+               {char* v =(yyvsp[0].variable);(yyval.variable)=v;
+//printf("variable est %s\n",$1);
+}
+#line 1643 "parser.tab.cc"
     break;
 
   case 20:
-#line 134 "parser.yy"
+#line 214 "parser.yy"
                                                       {
-printf("boucle sur %s",(yyvsp[-3].variable));
+//printf("boucle sur %s",$2);
 if(!chercherVar(maListe,(yyvsp[-3].variable))){
         yyerror("variable non initialise");
 	return 2;
@@ -1579,178 +1657,243 @@ if(!chercherVar(maListe,(yyvsp[-3].variable))){
 	
 	(yyval.variable)=(yyvsp[-3].variable);
 }
-#line 1583 "parser.tab.cc"
+#line 1661 "parser.tab.cc"
     break;
 
   case 21:
-#line 151 "parser.yy"
+#line 231 "parser.yy"
                                    {(yyval.num)=(yyvsp[-1].num);}
-#line 1589 "parser.tab.cc"
+#line 1667 "parser.tab.cc"
     break;
 
   case 22:
-#line 153 "parser.yy"
+#line 233 "parser.yy"
                                                    {
 
-printf("%d <= %d",getVal(maListe,(yyvsp[-3].variable)),(yyvsp[-2].num));
+//printf("%d <= %d",getVal(maListe,$1),$2);
 
 if(getVal(maListe,(yyvsp[-3].variable))>=(yyvsp[-2].num)){
 	yyerror("boucle negative ou null");
        	return 2;
 }
 setVarBoucle(maListe,(yyvsp[-3].variable));
+
+Float* fMin = new Float(getVal(maListe,(yyvsp[-3].variable)));
+Float* fMax = new Float((yyvsp[-2].num));
+While* w = new While((yyvsp[-3].variable),(yyvsp[-1].instr),fMin,fMax);
+(yyval.instr)=w;
+
 setVal(maListe,(yyvsp[-2].num),(yyvsp[-3].variable));
 }
-#line 1605 "parser.tab.cc"
+#line 1689 "parser.tab.cc"
     break;
 
   case 23:
-#line 166 "parser.yy"
+#line 252 "parser.yy"
             {
-	printf("fin boucle\n");
+	//printf("fin boucle\n");
 }
-#line 1613 "parser.tab.cc"
+#line 1697 "parser.tab.cc"
     break;
 
   case 24:
-#line 171 "parser.yy"
+#line 257 "parser.yy"
                                                   {
 	p.posX=(yyvsp[-2].num);p.posY=(yyvsp[0].num);
-	printf("Dessin commence a : %d , %d\n",(yyvsp[-2].num),(yyvsp[0].num));
+	//printf("Dessin commence a : %d , %d\n",$2,$4);
 }
-#line 1622 "parser.tab.cc"
+#line 1706 "parser.tab.cc"
     break;
 
   case 25:
-#line 177 "parser.yy"
-                              {}
-#line 1628 "parser.tab.cc"
+#line 263 "parser.yy"
+                              {
+   Sequence* s = new Sequence((yyvsp[-1].instr));
+   s->add((yyvsp[0].instr));
+}
+#line 1715 "parser.tab.cc"
     break;
 
   case 26:
-#line 178 "parser.yy"
-      {}
-#line 1634 "parser.tab.cc"
+#line 267 "parser.yy"
+      {
+
+}
+#line 1723 "parser.tab.cc"
+    break;
+
+  case 27:
+#line 271 "parser.yy"
+                       {(yyval.instr)=(yyvsp[-1].instr);}
+#line 1729 "parser.tab.cc"
     break;
 
   case 28:
-#line 181 "parser.yy"
-                     {printf("deplacer crayon\n");}
-#line 1640 "parser.tab.cc"
+#line 272 "parser.yy"
+                     {
+//printf("deplacer crayon\n");
+(yyval.instr)=(yyvsp[-1].instr);}
+#line 1737 "parser.tab.cc"
     break;
 
   case 29:
-#line 182 "parser.yy"
-                 {printf("valeur initialiser\n");}
-#line 1646 "parser.tab.cc"
+#line 275 "parser.yy"
+                 {
+//printf("valeur initialiser\n");
+(yyval.instr)=(yyvsp[-1].instr);}
+#line 1745 "parser.tab.cc"
     break;
 
   case 30:
-#line 183 "parser.yy"
-                     {printf("declarer valeur\n");}
-#line 1652 "parser.tab.cc"
+#line 278 "parser.yy"
+                     {
+//printf("declarer valeur\n");
+(yyval.instr)=(yyvsp[-1].instr);}
+#line 1753 "parser.tab.cc"
     break;
 
   case 31:
-#line 184 "parser.yy"
-                    {printf("ligne dessiner\n");}
-#line 1658 "parser.tab.cc"
+#line 281 "parser.yy"
+                    {
+//printf("ligne dessiner\n");
+(yyval.instr)=(yyvsp[-1].instr);}
+#line 1761 "parser.tab.cc"
     break;
 
   case 32:
-#line 185 "parser.yy"
-                     {printf("carree dessiner\n");}
-#line 1664 "parser.tab.cc"
+#line 284 "parser.yy"
+                     {
+//printf("carree dessiner\n");
+(yyval.instr)=(yyvsp[-1].instr);}
+#line 1769 "parser.tab.cc"
     break;
 
   case 33:
-#line 186 "parser.yy"
+#line 287 "parser.yy"
       {}
-#line 1670 "parser.tab.cc"
+#line 1775 "parser.tab.cc"
     break;
 
   case 34:
-#line 189 "parser.yy"
+#line 290 "parser.yy"
                       {
-	printf("couleur\n"); 
+	//printf("couleur\n"); 
+	(yyval.instr)=(yyvsp[0].instr);
 }
-#line 1678 "parser.tab.cc"
+#line 1784 "parser.tab.cc"
     break;
 
   case 35:
-#line 193 "parser.yy"
-           {printf("bleu\n");couleur=(char*)"bleu";}
-#line 1684 "parser.tab.cc"
+#line 295 "parser.yy"
+           {
+//printf("bleu\n");
+couleur=(char*)"bleu";Couleur* c= new Couleur(couleur);(yyval.instr)=c;}
+#line 1792 "parser.tab.cc"
     break;
 
   case 36:
-#line 194 "parser.yy"
-        {printf("rouge\n");couleur=(char*)"rouge";}
-#line 1690 "parser.tab.cc"
+#line 298 "parser.yy"
+        {
+//printf("rouge\n");
+couleur=(char*)"rouge";Couleur* c= new Couleur(couleur);(yyval.instr)=c;}
+#line 1800 "parser.tab.cc"
     break;
 
   case 37:
-#line 195 "parser.yy"
-       {printf("noir\n");couleur=(char*)"noir";}
-#line 1696 "parser.tab.cc"
+#line 301 "parser.yy"
+       {
+//printf("noir\n");
+couleur=(char*)"noir";Couleur* c= new Couleur(couleur);(yyval.instr)=c;}
+#line 1808 "parser.tab.cc"
     break;
 
   case 38:
-#line 198 "parser.yy"
-                                         {(yyval.num)=(yyvsp[-1].num);}
-#line 1702 "parser.tab.cc"
+#line 306 "parser.yy"
+                                         {(yyval.expr)=(yyvsp[-1].expr);}
+#line 1814 "parser.tab.cc"
     break;
 
   case 39:
-#line 200 "parser.yy"
-                           { printf("%d + %d\n",(yyvsp[-2].num),(yyvsp[0].num));(yyval.num)=(yyvsp[-2].num)+(yyvsp[0].num);}
-#line 1708 "parser.tab.cc"
+#line 308 "parser.yy"
+                           { 
+//printf("%d + %d\n",$1,$3);
+
+Float* f1= new Float((yyvsp[-2].num));
+Float* f2 = new Float((yyvsp[0].num));
+Operator* o=new Operator(PLUS,f1,f2);
+(yyval.expr)=o;
+}
+#line 1827 "parser.tab.cc"
     break;
 
   case 40:
-#line 201 "parser.yy"
-                      { printf("%d - %d\n",(yyvsp[-2].num),(yyvsp[0].num));(yyval.num)=(yyvsp[-2].num)-(yyvsp[0].num);}
-#line 1714 "parser.tab.cc"
+#line 316 "parser.yy"
+                      { 
+//printf("%d - %d\n",$1,$3);
+
+Float* f1= new Float((yyvsp[-2].num));
+Float* f2 = new Float((yyvsp[0].num));
+Operator* o=new Operator(MOINS,f1,f2);
+(yyval.expr)=o;
+}
+#line 1840 "parser.tab.cc"
     break;
 
   case 41:
-#line 202 "parser.yy"
-                     { printf("%d * %d\n",(yyvsp[-2].num),(yyvsp[0].num));(yyval.num)=(yyvsp[-2].num)*(yyvsp[0].num);}
-#line 1720 "parser.tab.cc"
+#line 324 "parser.yy"
+                     { 
+//printf("%d * %d\n",$1,$3);
+
+Float* f1= new Float((yyvsp[-2].num));
+Float* f2 = new Float((yyvsp[0].num));
+Operator* o=new Operator(MULT,f1,f2);
+(yyval.expr)=o;
+
+}
+#line 1854 "parser.tab.cc"
     break;
 
   case 42:
-#line 203 "parser.yy"
-                        { printf("%d / %d\n",(yyvsp[-2].num),(yyvsp[0].num));(yyval.num)=(yyvsp[-2].num)/(yyvsp[0].num);}
-#line 1726 "parser.tab.cc"
+#line 333 "parser.yy"
+                        { 
+//printf("%d / %d\n",$1,$3);
+Float* f1= new Float((yyvsp[-2].num));
+Float* f2 = new Float((yyvsp[0].num));
+Operator* o=new Operator(DIV,f1,f2);
+
+(yyval.expr)=o;
+}
+#line 1867 "parser.tab.cc"
     break;
 
   case 43:
-#line 206 "parser.yy"
+#line 343 "parser.yy"
           {(yyval.num)=(yyvsp[0].num);}
-#line 1732 "parser.tab.cc"
+#line 1873 "parser.tab.cc"
     break;
 
   case 44:
-#line 207 "parser.yy"
+#line 344 "parser.yy"
       {(yyval.num)=getVal(maListe,(yyvsp[0].variable));}
-#line 1738 "parser.tab.cc"
+#line 1879 "parser.tab.cc"
     break;
 
   case 45:
-#line 208 "parser.yy"
-            {(yyval.num)=(yyvsp[0].num);}
-#line 1744 "parser.tab.cc"
+#line 345 "parser.yy"
+            {/*$$=$1;*/}
+#line 1885 "parser.tab.cc"
     break;
 
   case 46:
-#line 212 "parser.yy"
-        {(yyval.num)=(yyvsp[0].num);printf("%d",(yyvsp[0].num));}
-#line 1750 "parser.tab.cc"
+#line 349 "parser.yy"
+        {(yyval.num)=(yyvsp[0].num);
+//printf("%d",$1);
+}
+#line 1893 "parser.tab.cc"
     break;
 
 
-#line 1754 "parser.tab.cc"
+#line 1897 "parser.tab.cc"
 
       default: break;
     }
@@ -1982,16 +2125,16 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 215 "parser.yy"
+#line 354 "parser.yy"
 
 
 int lancerParse(char* fichier){
 	maListe = initialisation();
-        printf("Application dessin \n");
+        //printf("Application dessin \n");
         yyin=fopen(fichier,"r+");
         if(yyin==NULL)
         {
-                printf("\n Error ! \n");
+                //printf("\n Error ! \n");
                 return 1;
         }
         else
