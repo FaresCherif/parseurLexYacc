@@ -13,6 +13,7 @@ class Sequence;
 class Var;
 class Ligne;
 class Carree;
+class Couleur;
 
 class Visitor {
 public:
@@ -27,6 +28,7 @@ public:
   virtual void visitSeq(const Sequence *s) = 0;
   virtual void visitLigne(const Ligne *l) = 0;
   virtual void visitCarree(const Carree *c) = 0;
+  virtual void visitCouleur(const Couleur *c)=0;
 };
 
 

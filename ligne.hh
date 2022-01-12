@@ -6,17 +6,21 @@
 #include "expr.hh"
 
 class Ligne : public Instruction {
-  Expression* x1;
-  Expression* y1;
-  Expression* x2;
-  Expression* y2;
+  Float* x1;
+  Float* y1;
+  Float* x2;
+  Float* y2;
 
 public:
-  Ligne(Expression* x1,Expression* y1,Expression* x2,Expression* y2);
+  Ligne(Float* x1,Float* y1,Float* x2,Float* y2);
   ~Ligne();
 
-  inline const Expression* getX1() const { return x1; }
-  
+  inline const Float* getX1() const { return x1; }
+  inline const Float* getY1() const { return y1; }
+inline const Float* getX2() const { return x2; }
+inline const Float* getY2() const { return y2; }
+
+
   void visit(Visitor& visitor) const;
 };
 

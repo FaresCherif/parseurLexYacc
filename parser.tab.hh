@@ -44,7 +44,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 39 "parser.yy"
+#line 40 "parser.yy"
 
   /* Fais un copier coller dans le fichier parser.tab.cc */
   #include "printer.hh"
@@ -86,7 +86,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 46 "parser.yy"
+#line 47 "parser.yy"
 
         int num;
 	char *variable;
@@ -95,8 +95,9 @@ union YYSTYPE
 	Carree*  care;
 	Ligne* lign;
 	Affect* af;
+	Couleur* col;
 
-#line 100 "parser.tab.hh"
+#line 101 "parser.tab.hh"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -1,7 +1,7 @@
 
 
-SRC=affect.cc  var.cc block.cc  cond.cc  decl.cc  float.cc  ope.cc  while.cc ligne.cc carree.cc seq.cc printer.cc lex.yy.c parser.tab.cc main.cc 
-SRCH=affect.hh var.hh  block.hh  cond.hh  decl.hh  expr.hh  float.hh  inst.hh  ope.hh  term.hh  while.hh ligne.hh carree.hh
+SRC=affect.cc  var.cc block.cc  cond.cc  decl.cc  couleur.cc float.cc  ope.cc  while.cc ligne.cc carree.cc seq.cc printer.cc lex.yy.c parser.tab.cc main.cc 
+SRCH=affect.hh var.hh  block.hh  cond.hh  decl.hh  expr.hh couleur.hh  float.hh  inst.hh  ope.hh  term.hh  while.hh ligne.hh carree.hh
 OBJ=$(SRC:.cc=.o)
 
 demo: $(OBJ)
