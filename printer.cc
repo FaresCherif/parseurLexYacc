@@ -69,10 +69,11 @@ void Printer::visitWhile(const While *w) {
   w->getMax()->visit(*this);
   cout<<")"<<endl;
   w->getBody()->visit(*this);
+  cout<<"fin boucle";
 }
 
 void Printer::visitLigne(const Ligne *l) {
-  cout<<"trace ligne de : "<<l->getX1()->getValue()<<","<<l->getY1()->getValue()<<" a "<<l->getX2()->getValue()<<" "<<l->getY2()->getValue();
+  cout<<"trace ligne de : "<<l->getX1()->getValue()<<","<<l->getY1()->getValue()<<" a "<<l->getX2()->getValue()<<" "<<l->getY2()->getValue()<<" en "<<l->getCouleur();
 }
 
 void Printer::visitCarree(const Carree *c){
@@ -87,7 +88,7 @@ void Printer::visitSeq(const Sequence *s) {
   SeqItem *t = s->getFirst();
   while(t != NULL) {
     t->getInst()->visit(*this);
-    printf("sequence");
+    //printf("sequence");
     t = t->getNext();
   }
   //cout<<"ATTENTION Inversion possible (en fct de votre algo)!"<<endl;

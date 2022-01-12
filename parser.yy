@@ -88,7 +88,7 @@ s->add($2);
 
 
 }
-| fin {}
+| fin {Sequence* s = new Sequence();$$=s;}
 ;
 
 DESSING :
@@ -115,7 +115,7 @@ DESSINERLIGNE :  LIGNE parOuvrant NOMBRE virgule NOMBRE parFermant parOuvrant NO
 	Float* x2=new Float($8);
 	Float* y1 = new Float($5);
 	Float* y2 = new Float($10);
-	Ligne* l1 = new Ligne(x1,y1,x2,y1);
+	Ligne* l1 = new Ligne(x1,y1,x2,y1,couleur);
 	
 	$$=l1;	
 
@@ -148,13 +148,15 @@ DESSINERCARREE : CARREE parOuvrant NOMBRE virgule NOMBRE parFermant parOuvrant N
 	Float* x2=new Float($8);
 	Float* y1 = new Float($5);
 	Float* y2 = new Float($10);
-	Ligne* l1 = new Ligne(x1,y1,x2,y1);
-	Ligne* l2 = new Ligne(x2,y1,x2,y2);
-	Ligne* l3 = new Ligne(x2,y1,x1,y2);
-	Ligne* l4 = new Ligne(x1,y2,x1,y1);
+	Ligne* l1 = new Ligne(x1,y1,x2,y1,couleur);
+	Ligne* l2 = new Ligne(x2,y1,x2,y2,couleur);
+	Ligne* l3 = new Ligne(x2,y1,x1,y2,couleur);
+	Ligne* l4 = new Ligne(x1,y2,x1,y1,couleur);
 	Carree *c = new Carree(l1,l2,l3,l4);
 
 	$$=c;
+
+	c->visit(printer);
 	
 }
 
@@ -170,7 +172,7 @@ DEPLACERCRAYON : parOuvrant NOMBRE virgule NOMBRE parFermant {
 	Float* y1 = new Float(p.posY);
 	Float* y2 = new Float($4);
 
-	Ligne* l1 = new Ligne(x1,y1,x2,y1);
+	Ligne* l1 = new Ligne(x1,y1,x2,y1,couleur);
 	
 
 	p.posX=$2;
@@ -204,6 +206,8 @@ DECLARERVALEUR : VARIABLE assigne NOMBRE {
 	//printf("variable declare est : %s\n",$1);
 	
 	$$=a;
+
+a->visit(printer);
 }
 ;
 
@@ -244,7 +248,7 @@ Float* fMin = new Float(getVal(maListe,$1));
 Float* fMax = new Float($2);
 While* w = new While($1,$3,fMin,fMax);
 $$=w;
-
+w->visit(printer);
 setVal(maListe,$2,$1);
 }
 ;

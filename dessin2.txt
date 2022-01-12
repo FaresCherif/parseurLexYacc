@@ -1,5 +1,8 @@
 DEBUTPROGRAMME
 DEC x;
 x<-5;
-Boucle(x,5,8);;
+Boucle(x,5,8)
+DEC o;
+o<-5;
 ;
+;;
