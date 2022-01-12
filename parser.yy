@@ -72,7 +72,7 @@ Printer printer;
 
 %%
 
-S : DEBUTPROGRAMME DESSIN {/*printf("fin programme\n\n")*/;afficherListe(maListe);
+S : DEBUTPROGRAMME DESSIN {printf("fichier accepte\n\n");afficherListe(maListe);
 	Sequence* s = new Sequence($2);
 
 

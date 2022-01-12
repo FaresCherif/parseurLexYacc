@@ -1440,7 +1440,7 @@ yyreduce:
     {
   case 2:
 #line 75 "parser.yy"
-                          {/*printf("fin programme\n\n")*/;afficherListe(maListe);
+                          {printf("fichier accepte\n\n");afficherListe(maListe);
 	Sequence* s = new Sequence((yyvsp[0].instr));
 
 
