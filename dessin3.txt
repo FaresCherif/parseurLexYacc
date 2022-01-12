@@ -1,7 +1,8 @@
+DEBUTPROGRAMME
 DEC x;
+
+Boucle(x,0,10)
 x<-5;
-DebutDessin{x,2;
-((x+1),12);
 ;
-};
-;
+
+;;;

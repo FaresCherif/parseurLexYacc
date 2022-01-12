@@ -11,7 +11,8 @@ Il se trouve dans l'archive :
 - Variable.h sert a creer la liste des variables
 - Position.h contient la classe permettant de savoir la position actuelle du crayon
 - demo est l'executable du projet , pour le lancer il faut donner un fichier en paramettre
-- dessin1.txt,dessin2.txt et dessin3.txt sont des exemples de fichiers acceptés 
+- dessin1.txt ( carree noir avec diagonales bleu),dessin2.txt (quadrillage) et dessin3.txt (erreur affectation dans boucle)
+  sont des exemples de fichiers 
 - visiteur.hh, printer.hh et printer.cc servent tout les trois à faire le design pattern visiteur.
   Les fonctions se trouvent dans printer.cc
 - carree.cc/hh , ligne.cc/hh , couleur.cc/hh  sont des classes "block" qui servent à remetter des infos et a pouvoir 
