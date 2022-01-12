@@ -50,61 +50,63 @@ extern int yydebug;
   enum yytokentype
   {
     fin = 258,
-    plus = 259,
+    plu = 259,
     moins = 260,
     fois = 261,
     diviser = 262,
     baisserCrayon = 263,
     leverCrayon = 264,
-    bleu = 265,
-    rouge = 266,
-    noir = 267,
-    colSymb = 268,
-    virgule = 269,
-    chevronOuvrant = 270,
-    assigne = 271,
-    parOuvrant = 272,
-    parFermant = 273,
-    ligne = 274,
-    carree = 275,
-    dec = 276,
-    nombreD = 277,
-    var = 278
+    debut = 265,
+    bleu = 266,
+    rouge = 267,
+    noir = 268,
+    colSymb = 269,
+    virgule = 270,
+    chevronOuvrant = 271,
+    assigne = 272,
+    parOuvrant = 273,
+    parFermant = 274,
+    ligne = 275,
+    carree = 276,
+    decla = 277,
+    nombreD = 278,
+    var = 279
   };
 #endif
 /* Tokens.  */
 #define fin 258
-#define plus 259
+#define plu 259
 #define moins 260
 #define fois 261
 #define diviser 262
 #define baisserCrayon 263
 #define leverCrayon 264
-#define bleu 265
-#define rouge 266
-#define noir 267
-#define colSymb 268
-#define virgule 269
-#define chevronOuvrant 270
-#define assigne 271
-#define parOuvrant 272
-#define parFermant 273
-#define ligne 274
-#define carree 275
-#define dec 276
-#define nombreD 277
-#define var 278
+#define debut 265
+#define bleu 266
+#define rouge 267
+#define noir 268
+#define colSymb 269
+#define virgule 270
+#define chevronOuvrant 271
+#define assigne 272
+#define parOuvrant 273
+#define parFermant 274
+#define ligne 275
+#define carree 276
+#define decla 277
+#define nombreD 278
+#define var 279
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 28 "dessin.yy"
+#line 39 "dessin.yy"
 
         int num;
 	char *variable;
 
-#line 108 "y.tab.h"
+#line 110 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

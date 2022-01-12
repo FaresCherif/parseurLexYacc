@@ -90,9 +90,20 @@ struct Liste *maListe;
 char* couleur="noir";
 char** lvar;
 int lancerParseur(char* s);
+bool chercherVar(Liste*,char*);
+
+void afficherListe(Liste *);
+
+bool isVarBoucle(Liste *, char* );
+void setVarBoucle(Liste *, char* );
+int getVal(Liste *,char*);
+void setVal(Liste *,int ,char*);
+void insertion(Liste *, char* );
+
+Liste *initialisation();
 
 
-#line 96 "y.tab.c"
+#line 107 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -141,61 +152,63 @@ extern int yydebug;
   enum yytokentype
   {
     fin = 258,
-    plus = 259,
+    plu = 259,
     moins = 260,
     fois = 261,
     diviser = 262,
     baisserCrayon = 263,
     leverCrayon = 264,
-    bleu = 265,
-    rouge = 266,
-    noir = 267,
-    colSymb = 268,
-    virgule = 269,
-    chevronOuvrant = 270,
-    assigne = 271,
-    parOuvrant = 272,
-    parFermant = 273,
-    ligne = 274,
-    carree = 275,
-    dec = 276,
-    nombreD = 277,
-    var = 278
+    debut = 265,
+    bleu = 266,
+    rouge = 267,
+    noir = 268,
+    colSymb = 269,
+    virgule = 270,
+    chevronOuvrant = 271,
+    assigne = 272,
+    parOuvrant = 273,
+    parFermant = 274,
+    ligne = 275,
+    carree = 276,
+    decla = 277,
+    nombreD = 278,
+    var = 279
   };
 #endif
 /* Tokens.  */
 #define fin 258
-#define plus 259
+#define plu 259
 #define moins 260
 #define fois 261
 #define diviser 262
 #define baisserCrayon 263
 #define leverCrayon 264
-#define bleu 265
-#define rouge 266
-#define noir 267
-#define colSymb 268
-#define virgule 269
-#define chevronOuvrant 270
-#define assigne 271
-#define parOuvrant 272
-#define parFermant 273
-#define ligne 274
-#define carree 275
-#define dec 276
-#define nombreD 277
-#define var 278
+#define debut 265
+#define bleu 266
+#define rouge 267
+#define noir 268
+#define colSymb 269
+#define virgule 270
+#define chevronOuvrant 271
+#define assigne 272
+#define parOuvrant 273
+#define parFermant 274
+#define ligne 275
+#define carree 276
+#define decla 277
+#define nombreD 278
+#define var 279
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 28 "dessin.yy"
+#line 39 "dessin.yy"
 
         int num;
 	char *variable;
 
-#line 199 "y.tab.c"
+#line 212 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -512,21 +525,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  29
+#define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   90
+#define YYLAST   89
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  24
+#define YYNTOKENS  25
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  26
+#define YYNNTS  27
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  45
+#define YYNRULES  46
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  106
+#define YYNSTATES  108
 
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   278
+#define YYMAXUTOK   279
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -565,18 +578,18 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    19,    20,    21,    22,    23
+      15,    16,    17,    18,    19,    20,    21,    22,    23,    24
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    47,    47,    49,    50,    54,    55,    56,    57,    58,
-      60,    65,    67,    70,    72,    80,    84,    90,   109,   111,
-     127,   129,   142,   147,   153,   154,   156,   157,   158,   159,
-     160,   161,   162,   165,   169,   170,   171,   174,   176,   177,
-     178,   179,   182,   183,   184,   188
+       0,    58,    58,    60,    62,    63,    67,    68,    69,    70,
+      71,    73,    78,    80,    83,    85,    93,    97,   103,   122,
+     124,   141,   143,   156,   161,   167,   168,   170,   171,   172,
+     173,   174,   175,   176,   179,   183,   184,   185,   188,   190,
+     191,   192,   193,   196,   197,   198,   202
 };
 #endif
 
@@ -585,15 +598,15 @@ static const yytype_uint8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "fin", "plus", "moins", "fois",
-  "diviser", "baisserCrayon", "leverCrayon", "bleu", "rouge", "noir",
+  "$end", "error", "$undefined", "fin", "plu", "moins", "fois", "diviser",
+  "baisserCrayon", "leverCrayon", "debut", "bleu", "rouge", "noir",
   "colSymb", "virgule", "chevronOuvrant", "assigne", "parOuvrant",
-  "parFermant", "ligne", "carree", "dec", "nombreD", "var", "$accept", "S",
-  "DESSIN", "DESSING", "DESSINERLIGNE", "LIGNE", "INITVALEUR", "DEC",
-  "DESSINERCARREE", "CARREE", "DEPLACERCRAYON", "DECLARERVALEUR",
-  "VARIABLE", "BOUCLEVAR", "BOUCLEVALFINAL", "BOUCLE", "FINBOUCLE",
-  "DEBUTDESSIN", "DESSINER", "DESSINERG", "COULEUR", "COL", "OPERATION",
-  "CALCUL", "NOMBRE", "X", YY_NULLPTR
+  "parFermant", "ligne", "carree", "decla", "nombreD", "var", "$accept",
+  "S", "DEBUTPROGRAMME", "DESSIN", "DESSING", "DESSINERLIGNE", "LIGNE",
+  "INITVALEUR", "DEC", "DESSINERCARREE", "CARREE", "DEPLACERCRAYON",
+  "DECLARERVALEUR", "VARIABLE", "BOUCLEVAR", "BOUCLEVALFINAL", "BOUCLE",
+  "FINBOUCLE", "DEBUTDESSIN", "DESSINER", "DESSINERG", "COULEUR", "COL",
+  "OPERATION", "CALCUL", "NOMBRE", "X", YY_NULLPTR
 };
 #endif
 
@@ -604,16 +617,16 @@ static const yytype_int16 yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
-     275,   276,   277,   278
+     275,   276,   277,   278,   279
 };
 # endif
 
-#define YYPACT_NINF (-17)
+#define YYPACT_NINF (-19)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
 
-#define YYTABLE_NINF (-26)
+#define YYTABLE_NINF (-27)
 
 #define yytable_value_is_error(Yyn) \
   0
@@ -622,17 +635,17 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-       3,   -17,    -8,    42,   -16,   -17,   -17,     8,   -17,     3,
-       7,    -6,     9,     5,    -8,    16,    10,    19,    -8,   -17,
-     -17,   -17,    18,   -17,   -17,   -17,   -17,   -17,    20,   -17,
-     -17,   -17,   -17,   -17,    -8,     3,    22,   -17,    27,    -8,
-     -17,   -17,    35,    30,    46,    47,    38,    53,    54,    55,
-      10,    59,   -17,    45,    39,    -8,    -8,   -17,   -17,   -17,
-      52,   -17,    -8,   -17,   -17,    -8,   -17,   -17,    64,   -17,
-     -17,   -17,    -8,    -8,    -8,    -8,   -17,    56,   -17,    -8,
-      57,    58,   -17,   -17,   -17,   -17,   -17,   -17,    50,    -8,
-      -8,   -17,    51,    60,    62,    63,    -8,    -8,    67,    70,
-      -8,    -8,    71,    72,   -17,   -17
+       0,   -19,    13,     9,   -19,   -19,    -9,    -5,    -8,   -19,
+     -19,   -19,     9,    15,    -4,    18,    20,    -9,    32,     8,
+      36,    -9,   -19,   -19,   -19,    31,   -19,   -19,   -19,   -19,
+     -19,    33,   -19,   -19,   -19,   -19,    -9,     9,    30,   -19,
+      42,    -9,   -19,   -19,    49,    35,    51,    52,    43,    53,
+      59,    54,     8,    62,   -19,    47,    38,    -9,    -9,   -19,
+     -19,   -19,    55,   -19,    -9,   -19,   -19,    -9,   -19,   -19,
+      64,   -19,   -19,   -19,    -9,    -9,    -9,    -9,   -19,    56,
+     -19,    -9,    57,    58,   -19,   -19,   -19,   -19,   -19,   -19,
+      50,    -9,    -9,   -19,    60,    61,    65,    66,    -9,    -9,
+      63,    72,    -9,    -9,    69,    70,   -19,   -19
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -640,33 +653,33 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     4,     0,     0,     0,    13,    18,     0,     2,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,    45,
-      43,    44,     0,    42,    34,    35,    36,    33,     0,     1,
-       3,     7,    12,     8,     0,     0,     0,     6,    32,     0,
-      11,    15,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     9,     0,     0,     0,     0,    17,    22,    20,
-       0,    30,     0,    28,    31,     0,    27,    29,     0,    24,
-      26,    37,     0,     0,     0,     0,    23,     0,    21,     0,
-       0,     0,     5,    38,    39,    40,    41,    19,     0,     0,
-       0,    16,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,    10,    14
+       0,     3,     0,     0,     1,     5,     0,     0,     0,    14,
+      19,     2,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,    46,    44,    45,     0,    43,    35,    36,    37,
+      34,     0,     4,     8,    13,     9,     0,     0,     0,     7,
+      33,     0,    12,    16,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,    10,     0,     0,     0,     0,    18,
+      23,    21,     0,    31,     0,    29,    32,     0,    28,    30,
+       0,    25,    27,    38,     0,     0,     0,     0,    24,     0,
+      22,     0,     0,     0,     6,    39,    40,    41,    42,    20,
+       0,     0,     0,    17,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,    11,    15
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -17,   -17,    -7,   -17,   -17,   -17,   -15,   -17,   -17,   -17,
-     -17,   -13,   -17,   -17,   -17,   -17,   -17,   -17,    23,   -17,
-     -11,   -17,   -17,   -17,   -14,   -17
+     -19,   -19,   -19,   -10,   -19,   -19,   -19,   -18,   -19,   -19,
+     -19,   -19,   -16,   -19,   -19,   -19,   -19,   -19,   -19,    16,
+     -19,   -14,   -19,   -19,   -19,   -17,   -19
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     7,     8,     9,    42,    43,    10,    11,    45,    46,
-      47,    12,    13,    14,    35,    15,    78,    16,    49,    50,
-      17,    27,    21,    53,    22,    23
+      -1,     2,     3,    11,    12,    44,    45,    13,    14,    47,
+      48,    49,    15,    16,    17,    37,    18,    80,    19,    51,
+      52,    20,    30,    24,    55,    25,    26
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -674,67 +687,65 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      36,    44,    30,    48,    54,    51,     1,    28,    29,    18,
-      31,     2,    33,    38,    19,    20,     3,    32,     4,    37,
-      57,    34,    52,     3,     5,    60,     6,    39,    58,    40,
-      41,     5,    55,     6,    56,    44,   -25,    48,    61,    51,
-      59,    76,    77,    72,    73,    74,    75,    62,    80,    63,
-      64,    81,    24,    25,    26,    65,    66,    67,    83,    84,
-      85,    86,    70,    71,    68,    88,    79,    82,    91,    94,
-      87,    89,    90,    69,     0,    92,    93,     0,    95,    96,
-      97,   100,    98,    99,   101,     0,   102,   103,     0,   104,
-     105
+      38,    46,    32,    50,    56,    53,    27,    28,    29,    21,
+       1,    40,     5,     4,    22,    23,    31,     6,    33,    59,
+      34,    35,     7,     7,    62,     8,    41,    60,    42,    43,
+       9,     9,    10,    10,    46,    39,    50,    36,    53,    54,
+      78,    79,    74,    75,    76,    77,    57,    82,    58,    61,
+      83,   -26,    63,    64,    65,    66,    68,    85,    86,    87,
+      88,    67,    69,    70,    90,    72,    73,    84,    71,    93,
+      81,    89,    91,    92,    94,    95,     0,     0,   102,    96,
+      97,   100,   101,    98,    99,   104,   105,   103,   106,   107
 };
 
 static const yytype_int8 yycheck[] =
 {
-      14,    16,     9,    16,    18,    16,     3,    23,     0,    17,
-       3,     8,     3,     3,    22,    23,    13,    23,    15,     3,
-      34,    16,     3,    13,    21,    39,    23,    17,    35,    19,
-      20,    21,    14,    23,    14,    50,     9,    50,     3,    50,
-      18,    55,    56,     4,     5,     6,     7,    17,    62,     3,
-       3,    65,    10,    11,    12,    17,     3,     3,    72,    73,
-      74,    75,     3,    18,     9,    79,    14,     3,    18,    18,
-      14,    14,    14,    50,    -1,    89,    90,    -1,    18,    17,
-      17,    14,    96,    97,    14,    -1,   100,   101,    -1,    18,
-      18
+      17,    19,    12,    19,    21,    19,    11,    12,    13,    18,
+      10,     3,     3,     0,    23,    24,    24,     8,     3,    36,
+      24,     3,    14,    14,    41,    16,    18,    37,    20,    21,
+      22,    22,    24,    24,    52,     3,    52,    17,    52,     3,
+      57,    58,     4,     5,     6,     7,    15,    64,    15,    19,
+      67,     9,     3,    18,     3,     3,     3,    74,    75,    76,
+      77,    18,     3,     9,    81,     3,    19,     3,    52,    19,
+      15,    15,    15,    15,    91,    92,    -1,    -1,    15,    19,
+      19,    98,    99,    18,    18,   102,   103,    15,    19,    19
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     3,     8,    13,    15,    21,    23,    25,    26,    27,
-      30,    31,    35,    36,    37,    39,    41,    44,    17,    22,
-      23,    46,    48,    49,    10,    11,    12,    45,    23,     0,
-      26,     3,    23,     3,    16,    38,    48,     3,     3,    17,
-      19,    20,    28,    29,    30,    32,    33,    34,    35,    42,
-      43,    44,     3,    47,    48,    14,    14,    48,    26,    18,
-      48,     3,    17,     3,     3,    17,     3,     3,     9,    42,
-       3,    18,     4,     5,     6,     7,    48,    48,    40,    14,
-      48,    48,     3,    48,    48,    48,    48,    14,    48,    14,
-      14,    18,    48,    48,    18,    18,    17,    17,    48,    48,
-      14,    14,    48,    48,    18,    18
+       0,    10,    26,    27,     0,     3,     8,    14,    16,    22,
+      24,    28,    29,    32,    33,    37,    38,    39,    41,    43,
+      46,    18,    23,    24,    48,    50,    51,    11,    12,    13,
+      47,    24,    28,     3,    24,     3,    17,    40,    50,     3,
+       3,    18,    20,    21,    30,    31,    32,    34,    35,    36,
+      37,    44,    45,    46,     3,    49,    50,    15,    15,    50,
+      28,    19,    50,     3,    18,     3,     3,    18,     3,     3,
+       9,    44,     3,    19,     4,     5,     6,     7,    50,    50,
+      42,    15,    50,    50,     3,    50,    50,    50,    50,    15,
+      50,    15,    15,    19,    50,    50,    19,    19,    18,    18,
+      50,    50,    15,    15,    50,    50,    19,    19
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    24,    25,    26,    26,    27,    27,    27,    27,    27,
-      28,    29,    30,    31,    32,    33,    34,    35,    36,    37,
-      38,    39,    40,    41,    42,    42,    43,    43,    43,    43,
-      43,    43,    43,    44,    45,    45,    45,    46,    47,    47,
-      47,    47,    48,    48,    48,    49
+       0,    25,    26,    27,    28,    28,    29,    29,    29,    29,
+      29,    30,    31,    32,    33,    34,    35,    36,    37,    38,
+      39,    40,    41,    42,    43,    44,    44,    45,    45,    45,
+      45,    45,    45,    45,    46,    47,    47,    47,    48,    49,
+      49,    49,    49,    50,    50,    50,    51
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     2,     1,     4,     2,     2,     2,     2,
-      11,     1,     2,     1,    11,     1,     5,     3,     1,     5,
-       2,     4,     0,     4,     2,     1,     2,     2,     2,     2,
-       2,     2,     1,     2,     1,     1,     1,     3,     3,     3,
-       3,     3,     1,     1,     1,     1
+       0,     2,     2,     1,     2,     1,     4,     2,     2,     2,
+       2,    11,     1,     2,     1,    11,     1,     5,     3,     1,
+       5,     2,     4,     0,     4,     2,     1,     2,     2,     2,
+       2,     2,     2,     1,     2,     1,     1,     1,     3,     3,
+       3,     3,     3,     1,     1,     1,     1
 };
 
 
@@ -1430,81 +1441,87 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 47 "dessin.yy"
-           {printf("fin programme\n\n");afficherListe(maListe);return 0;}
-#line 1436 "y.tab.c"
+#line 58 "dessin.yy"
+                          {printf("fin programme\n\n");afficherListe(maListe);return 0;}
+#line 1447 "y.tab.c"
     break;
 
   case 3:
-#line 49 "dessin.yy"
-                        {}
-#line 1442 "y.tab.c"
+#line 60 "dessin.yy"
+                       {maListe = initialisation();}
+#line 1453 "y.tab.c"
     break;
 
   case 4:
-#line 50 "dessin.yy"
-      {}
-#line 1448 "y.tab.c"
+#line 62 "dessin.yy"
+                        {}
+#line 1459 "y.tab.c"
     break;
 
   case 5:
-#line 54 "dessin.yy"
-                                     {printf("dessin fini ");}
-#line 1454 "y.tab.c"
+#line 63 "dessin.yy"
+      {}
+#line 1465 "y.tab.c"
     break;
 
   case 6:
-#line 55 "dessin.yy"
-             {printf("boucle fini\n");}
-#line 1460 "y.tab.c"
+#line 67 "dessin.yy"
+                                     {printf("dessin fini ");}
+#line 1471 "y.tab.c"
     break;
 
   case 7:
-#line 56 "dessin.yy"
-                 {printf("valeur initialiser\n");}
-#line 1466 "y.tab.c"
+#line 68 "dessin.yy"
+             {printf("boucle fini\n");}
+#line 1477 "y.tab.c"
     break;
 
   case 8:
-#line 57 "dessin.yy"
-                     {printf("declarer valeur %s\n",(yyvsp[-1].variable));}
-#line 1472 "y.tab.c"
+#line 69 "dessin.yy"
+                 {printf("valeur initialiser\n");}
+#line 1483 "y.tab.c"
     break;
 
   case 9:
-#line 58 "dessin.yy"
-              {printf("changer couleur\n");}
-#line 1478 "y.tab.c"
+#line 70 "dessin.yy"
+                     {printf("declarer valeur %s\n",(yyvsp[-1].variable));}
+#line 1489 "y.tab.c"
     break;
 
   case 10:
-#line 60 "dessin.yy"
-                                                                                                               {
-	printf("trait de %d,%d a %d,%d en %s\n",(yyvsp[-8].num),(yyvsp[-6].num),(yyvsp[-3].num),(yyvsp[-1].num),couleur);
-}
-#line 1486 "y.tab.c"
+#line 71 "dessin.yy"
+              {printf("changer couleur\n");}
+#line 1495 "y.tab.c"
     break;
 
   case 11:
-#line 65 "dessin.yy"
-              {printf("ligne\n");}
-#line 1492 "y.tab.c"
+#line 73 "dessin.yy"
+                                                                                                               {
+	printf("trait de %d,%d a %d,%d en %s\n",(yyvsp[-8].num),(yyvsp[-6].num),(yyvsp[-3].num),(yyvsp[-1].num),couleur);
+}
+#line 1503 "y.tab.c"
     break;
 
   case 12:
-#line 67 "dessin.yy"
-                     {printf("valeur initialiser");insertion(maListe,(yyvsp[0].variable));}
-#line 1498 "y.tab.c"
+#line 78 "dessin.yy"
+              {printf("ligne\n");}
+#line 1509 "y.tab.c"
     break;
 
   case 13:
-#line 70 "dessin.yy"
-          {printf("declar");}
-#line 1504 "y.tab.c"
+#line 80 "dessin.yy"
+                     {printf("valeur initialiser");insertion(maListe,(yyvsp[0].variable));}
+#line 1515 "y.tab.c"
     break;
 
   case 14:
-#line 72 "dessin.yy"
+#line 83 "dessin.yy"
+            {printf("declar");}
+#line 1521 "y.tab.c"
+    break;
+
+  case 15:
+#line 85 "dessin.yy"
                                                                                                                 {
 	//visitCarree();
 	printf("trait de %d,%d a %d,%d en %s\n",(yyvsp[-8].num),(yyvsp[-6].num),(yyvsp[-3].num),(yyvsp[-6].num),couleur);
@@ -1512,29 +1529,29 @@ yyreduce:
 	printf("trait de %d,%d a %d,%d en %s\n",(yyvsp[-3].num),(yyvsp[-1].num),(yyvsp[-8].num),(yyvsp[-1].num),couleur);
 	printf("trait de %d,%d a %d,%d en %s\n",(yyvsp[-8].num),(yyvsp[-1].num),(yyvsp[-8].num),(yyvsp[-6].num),couleur);
 }
-#line 1516 "y.tab.c"
-    break;
-
-  case 15:
-#line 80 "dessin.yy"
-               {
-	printf("carree\n");
-}
-#line 1524 "y.tab.c"
+#line 1533 "y.tab.c"
     break;
 
   case 16:
-#line 84 "dessin.yy"
+#line 93 "dessin.yy"
+               {
+	printf("carree\n");
+}
+#line 1541 "y.tab.c"
+    break;
+
+  case 17:
+#line 97 "dessin.yy"
                                                              {
 	printf("trait de %d,%d a %d,%d en %s\n",p.posX,p.posY,(yyvsp[-3].num),(yyvsp[-1].num),couleur);
 	p.posX=(yyvsp[-3].num);
 	p.posY=(yyvsp[-1].num);
 }
-#line 1534 "y.tab.c"
+#line 1551 "y.tab.c"
     break;
 
-  case 17:
-#line 90 "dessin.yy"
+  case 18:
+#line 103 "dessin.yy"
                                          {
 	if(!chercherVar(maListe,(yyvsp[-2].variable))){
 		yyerror("variable non declare");
@@ -1552,21 +1569,22 @@ yyreduce:
 	setVal(maListe,(yyvsp[0].num),(yyvsp[-2].variable));
 	printf("variable declare est : %s\n",(yyvsp[-2].variable));(yyval.variable)=(yyvsp[-2].variable);
 }
-#line 1556 "y.tab.c"
-    break;
-
-  case 18:
-#line 109 "dessin.yy"
-               {char* v =(yyvsp[0].variable);(yyval.variable)=v;printf("variable est %s\n",(yyvsp[0].variable));}
-#line 1562 "y.tab.c"
+#line 1573 "y.tab.c"
     break;
 
   case 19:
-#line 111 "dessin.yy"
+#line 122 "dessin.yy"
+               {char* v =(yyvsp[0].variable);(yyval.variable)=v;printf("variable est %s\n",(yyvsp[0].variable));}
+#line 1579 "y.tab.c"
+    break;
+
+  case 20:
+#line 124 "dessin.yy"
                                                       {
 printf("boucle sur %s",(yyvsp[-3].variable));
 if(!chercherVar(maListe,(yyvsp[-3].variable))){
-        return yyerror("variable non initialise");
+        yyerror("variable non initialise");
+	return 2;
         }
         else{
                 setVarBoucle(maListe,(yyvsp[-3].variable));
@@ -1575,17 +1593,17 @@ if(!chercherVar(maListe,(yyvsp[-3].variable))){
 	
 	(yyval.variable)=(yyvsp[-3].variable);
 }
-#line 1579 "y.tab.c"
-    break;
-
-  case 20:
-#line 127 "dessin.yy"
-                                   {(yyval.num)=(yyvsp[-1].num);}
-#line 1585 "y.tab.c"
+#line 1597 "y.tab.c"
     break;
 
   case 21:
-#line 129 "dessin.yy"
+#line 141 "dessin.yy"
+                                   {(yyval.num)=(yyvsp[-1].num);}
+#line 1603 "y.tab.c"
+    break;
+
+  case 22:
+#line 143 "dessin.yy"
                                                    {
 
 printf("%d <= %d",getVal(maListe,(yyvsp[-3].variable)),(yyvsp[-2].num));
@@ -1597,156 +1615,156 @@ if(getVal(maListe,(yyvsp[-3].variable))>=(yyvsp[-2].num)){
 setVarBoucle(maListe,(yyvsp[-3].variable));
 setVal(maListe,(yyvsp[-2].num),(yyvsp[-3].variable));
 }
-#line 1601 "y.tab.c"
-    break;
-
-  case 22:
-#line 142 "dessin.yy"
-            {
-	printf("fin boucle\n");
-}
-#line 1609 "y.tab.c"
+#line 1619 "y.tab.c"
     break;
 
   case 23:
-#line 147 "dessin.yy"
+#line 156 "dessin.yy"
+            {
+	printf("fin boucle\n");
+}
+#line 1627 "y.tab.c"
+    break;
+
+  case 24:
+#line 161 "dessin.yy"
                                                   {
 	p.posX=(yyvsp[-2].num);p.posY=(yyvsp[0].num);
 	printf("Dessin commence a : %d , %d\n",(yyvsp[-2].num),(yyvsp[0].num));
 }
-#line 1618 "y.tab.c"
-    break;
-
-  case 24:
-#line 153 "dessin.yy"
-                              {}
-#line 1624 "y.tab.c"
-    break;
-
-  case 25:
-#line 154 "dessin.yy"
-      {}
-#line 1630 "y.tab.c"
-    break;
-
-  case 27:
-#line 157 "dessin.yy"
-                     {printf("deplacer crayon\n");}
 #line 1636 "y.tab.c"
     break;
 
-  case 28:
-#line 158 "dessin.yy"
-                 {printf("valeur initialiser\n");}
+  case 25:
+#line 167 "dessin.yy"
+                              {}
 #line 1642 "y.tab.c"
     break;
 
-  case 29:
-#line 159 "dessin.yy"
-                     {printf("declarer valeur\n");}
+  case 26:
+#line 168 "dessin.yy"
+      {}
 #line 1648 "y.tab.c"
     break;
 
-  case 30:
-#line 160 "dessin.yy"
-                    {printf("ligne dessiner\n");}
+  case 28:
+#line 171 "dessin.yy"
+                     {printf("deplacer crayon\n");}
 #line 1654 "y.tab.c"
     break;
 
-  case 31:
-#line 161 "dessin.yy"
-                     {printf("carree dessiner\n");}
+  case 29:
+#line 172 "dessin.yy"
+                 {printf("valeur initialiser\n");}
 #line 1660 "y.tab.c"
     break;
 
-  case 32:
-#line 162 "dessin.yy"
-      {}
+  case 30:
+#line 173 "dessin.yy"
+                     {printf("declarer valeur\n");}
 #line 1666 "y.tab.c"
     break;
 
+  case 31:
+#line 174 "dessin.yy"
+                    {printf("ligne dessiner\n");}
+#line 1672 "y.tab.c"
+    break;
+
+  case 32:
+#line 175 "dessin.yy"
+                     {printf("carree dessiner\n");}
+#line 1678 "y.tab.c"
+    break;
+
   case 33:
-#line 165 "dessin.yy"
-                      {
-	printf("couleur\n"); 
-}
-#line 1674 "y.tab.c"
+#line 176 "dessin.yy"
+      {}
+#line 1684 "y.tab.c"
     break;
 
   case 34:
-#line 169 "dessin.yy"
-           {printf("bleu\n");couleur="bleu";}
-#line 1680 "y.tab.c"
-    break;
-
-  case 35:
-#line 170 "dessin.yy"
-        {printf("rouge\n");couleur="rouge";}
-#line 1686 "y.tab.c"
-    break;
-
-  case 36:
-#line 171 "dessin.yy"
-       {printf("noir\n");couleur="noir";}
+#line 179 "dessin.yy"
+                      {
+	printf("couleur\n"); 
+}
 #line 1692 "y.tab.c"
     break;
 
-  case 37:
-#line 174 "dessin.yy"
-                                         {(yyval.num)=(yyvsp[-1].num);}
+  case 35:
+#line 183 "dessin.yy"
+           {printf("bleu\n");couleur=(char*)"bleu";}
 #line 1698 "y.tab.c"
     break;
 
-  case 38:
-#line 176 "dessin.yy"
-                            { printf("%d + %d\n",(yyvsp[-2].num),(yyvsp[0].num));(yyval.num)=(yyvsp[-2].num)+(yyvsp[0].num);}
+  case 36:
+#line 184 "dessin.yy"
+        {printf("rouge\n");couleur=(char*)"rouge";}
 #line 1704 "y.tab.c"
     break;
 
-  case 39:
-#line 177 "dessin.yy"
-                      { printf("%d - %d\n",(yyvsp[-2].num),(yyvsp[0].num));(yyval.num)=(yyvsp[-2].num)-(yyvsp[0].num);}
+  case 37:
+#line 185 "dessin.yy"
+       {printf("noir\n");couleur=(char*)"noir";}
 #line 1710 "y.tab.c"
     break;
 
-  case 40:
-#line 178 "dessin.yy"
-                     { printf("%d * %d\n",(yyvsp[-2].num),(yyvsp[0].num));(yyval.num)=(yyvsp[-2].num)*(yyvsp[0].num);}
+  case 38:
+#line 188 "dessin.yy"
+                                         {(yyval.num)=(yyvsp[-1].num);}
 #line 1716 "y.tab.c"
     break;
 
-  case 41:
-#line 179 "dessin.yy"
-                        { printf("%d / %d\n",(yyvsp[-2].num),(yyvsp[0].num));(yyval.num)=(yyvsp[-2].num)/(yyvsp[0].num);}
+  case 39:
+#line 190 "dessin.yy"
+                           { printf("%d + %d\n",(yyvsp[-2].num),(yyvsp[0].num));(yyval.num)=(yyvsp[-2].num)+(yyvsp[0].num);}
 #line 1722 "y.tab.c"
     break;
 
-  case 42:
-#line 182 "dessin.yy"
-          {(yyval.num)=(yyvsp[0].num);}
+  case 40:
+#line 191 "dessin.yy"
+                      { printf("%d - %d\n",(yyvsp[-2].num),(yyvsp[0].num));(yyval.num)=(yyvsp[-2].num)-(yyvsp[0].num);}
 #line 1728 "y.tab.c"
     break;
 
-  case 43:
-#line 183 "dessin.yy"
-      {(yyval.num)=getVal(maListe,(yyvsp[0].variable));}
+  case 41:
+#line 192 "dessin.yy"
+                     { printf("%d * %d\n",(yyvsp[-2].num),(yyvsp[0].num));(yyval.num)=(yyvsp[-2].num)*(yyvsp[0].num);}
 #line 1734 "y.tab.c"
     break;
 
-  case 44:
-#line 184 "dessin.yy"
-            {(yyval.num)=(yyvsp[0].num);}
+  case 42:
+#line 193 "dessin.yy"
+                        { printf("%d / %d\n",(yyvsp[-2].num),(yyvsp[0].num));(yyval.num)=(yyvsp[-2].num)/(yyvsp[0].num);}
 #line 1740 "y.tab.c"
     break;
 
-  case 45:
-#line 188 "dessin.yy"
-        {(yyval.num)=(yyvsp[0].num);printf("%d",(yyvsp[0].num));}
+  case 43:
+#line 196 "dessin.yy"
+          {(yyval.num)=(yyvsp[0].num);}
 #line 1746 "y.tab.c"
     break;
 
+  case 44:
+#line 197 "dessin.yy"
+      {(yyval.num)=getVal(maListe,(yyvsp[0].variable));}
+#line 1752 "y.tab.c"
+    break;
 
-#line 1750 "y.tab.c"
+  case 45:
+#line 198 "dessin.yy"
+            {(yyval.num)=(yyvsp[0].num);}
+#line 1758 "y.tab.c"
+    break;
+
+  case 46:
+#line 202 "dessin.yy"
+        {(yyval.num)=(yyvsp[0].num);printf("%d",(yyvsp[0].num));}
+#line 1764 "y.tab.c"
+    break;
+
+
+#line 1768 "y.tab.c"
 
       default: break;
     }
@@ -1978,7 +1996,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 191 "dessin.yy"
+#line 205 "dessin.yy"
 
 
 int main(int argc, char *argv[])
@@ -1987,7 +2005,7 @@ int main(int argc, char *argv[])
 }
 
 int lancerParseur(char* fichier){
-	maListe = initialisation();
+	
         printf("Application dessin \n");
         yyin=fopen(fichier,"r+");
         if(yyin==NULL)
@@ -1998,8 +2016,8 @@ int lancerParseur(char* fichier){
         else
         {
                 yyparse();
-                return 0;
-        }
+		return 0;
+	}
 }
 
 
@@ -2014,3 +2032,152 @@ int yywrap()
 {
 	return(1);
 }
+
+
+
+
+
+
+Liste *initialisation()
+{
+    Liste *liste = (Liste *)malloc(sizeof(*liste));
+    Element *element = (Element *)malloc(sizeof(*element));
+
+    bool varBoucle=false;
+    element->nombre = 0;
+    element->nom=(char*)"debut de liste";
+    element->suivant = NULL;
+    liste->premier = element;
+
+    return liste;
+}
+
+void insertion(Liste *liste, char* n)
+{
+    
+    Element *nouveau = (Element *)malloc(sizeof(*nouveau));
+
+    nouveau->nombre = 0;
+    nouveau->nom = n;
+    nouveau->varBoucle=false;
+    nouveau->suivant = liste->premier;
+    liste->premier = nouveau;
+}
+
+void setVal(Liste *liste,int nvNombre,char*n){
+	Element *actuel = liste->premier;
+
+        while (actuel != NULL)
+        {
+                //printf("%s\n",actuel->nom);
+                if(strcmp(actuel->nom,n)){
+                        //printf("settage : %s != %s\n",actuel->nom,n);
+                        actuel=actuel->suivant;
+                }
+                else{
+                        //printf("settage : %s = %s\n",actuel->nom,n);
+                     	actuel->nombre=nvNombre;
+                        actuel=actuel->suivant;
+                }
+        }
+}
+
+
+int getVal(Liste *liste,char*n){
+        Element *actuel = liste->premier;
+
+        while (actuel != NULL)
+        {
+                //printf("%s\n",actuel->nom);
+                if(strcmp(actuel->nom,n)){
+                        //printf("settage : %s != %s\n",actuel->nom,n);
+                        actuel=actuel->suivant;
+                }
+                else{
+                        //printf("settage : %s = %s\n",actuel->nom,n);
+                        return actuel->nombre;
+                        actuel=actuel->suivant;
+                }
+        }
+	return 0;
+}
+
+
+void setVarBoucle(Liste *liste, char* n){
+	Element *actuel = liste->premier;
+
+    	while (actuel != NULL)
+    	{
+        	//printf("%s\n",actuel->nom);
+        	if(strcmp(actuel->nom,n)){
+			//printf("settage : %s != %s\n",actuel->nom,n);
+               		actuel=actuel->suivant;
+        	}
+        	else{
+			//printf("settage : %s = %s\n",actuel->nom,n);
+			if(actuel->varBoucle==false){
+				actuel->varBoucle=true;
+			}
+			else{
+				actuel->varBoucle=false;
+			}
+			actuel=actuel->suivant;
+        	}
+    	}
+}
+
+
+bool isVarBoucle(Liste *liste, char* n){
+	Element *actuel = liste->premier;
+
+        while (actuel != NULL)
+        {
+                //printf("%s\n",actuel->nom);
+                if(strcmp(actuel->nom,n)){
+                        //printf("varBoucle : %s != %s\n",actuel->nom,n);
+                        actuel=actuel->suivant;
+                }
+                else{
+                        //printf("varboucle : %s = %s %d\n",actuel->nom,n,actuel->varBoucle);
+                        if(actuel->varBoucle==true){
+                                return true;
+                        }
+			actuel=actuel->suivant;
+                }
+        }
+	return false;
+}
+
+void afficherListe(Liste *liste)
+{
+    Element *actuel = liste->premier;
+
+    while (actuel != NULL)
+    {
+        printf("%s = %d , %d\n",actuel->nom,actuel->nombre,actuel->varBoucle);
+        actuel = actuel->suivant;
+    }
+}
+
+bool chercherVar(Liste *liste, char* n)
+{
+	//printf("var checher est %s\n",n);
+    Element *actuel = liste->premier;
+
+    while (actuel != NULL)
+    {
+	//printf("%s\n",actuel->nom);
+	if(strcmp(actuel->nom,n)){
+		//printf("%s != %s\n",actuel->nom,n);
+		actuel=actuel->suivant;
+	}
+	else{
+		
+		return true;
+	}
+    }
+	
+	return false;
+
+}
+

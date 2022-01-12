@@ -4,8 +4,8 @@
 %}
 
 %%
-
-"DEC "	return(dec);
+"DEBUTPROGRAMME" return(debut);
+"DEC "	return(decla);
 "carree"	return(carree);
 "ligne"	return(ligne);
 "("	return(parOuvrant);
@@ -17,7 +17,7 @@
 ";"	return(fin);
 "DebutDessin{"	return(baisserCrayon);
 "}"	return(leverCrayon);
-"+"	return(plus);
+"+"	return(plu);
 "-"	return(moins);
 "*"	return(fois);
 "/"	return(diviser);

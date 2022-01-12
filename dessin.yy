@@ -21,6 +21,17 @@ struct Liste *maListe;
 char* couleur="noir";
 char** lvar;
 int lancerParseur(char* s);
+bool chercherVar(Liste*,char*);
+
+void afficherListe(Liste *);
+
+bool isVarBoucle(Liste *, char* );
+void setVarBoucle(Liste *, char* );
+int getVal(Liste *,char*);
+void setVal(Liste *,int ,char*);
+void insertion(Liste *, char* );
+
+Liste *initialisation();
 
 %}
 
@@ -30,8 +41,8 @@ int lancerParseur(char* s);
 	char *variable;
 }
 
-%token fin plus moins fois diviser baisserCrayon leverCrayon
-%token bleu rouge noir colSymb virgule chevronOuvrant assigne parOuvrant parFermant ligne carree dec
+%token fin plu moins fois diviser baisserCrayon leverCrayon debut
+%token bleu rouge noir colSymb virgule chevronOuvrant assigne parOuvrant parFermant ligne carree decla
 %token<num> nombreD
 %token<variable> var
 
@@ -44,7 +55,9 @@ int lancerParseur(char* s);
 
 %%
 
-S : DESSIN {printf("fin programme\n\n");afficherListe(maListe);return 0;}
+S : DEBUTPROGRAMME DESSIN {printf("fin programme\n\n");afficherListe(maListe);return 0;}
+
+DEBUTPROGRAMME : debut {maListe = initialisation();}
 
 DESSIN : DESSING DESSIN {}
 | fin {}
@@ -67,7 +80,7 @@ LIGNE : ligne {printf("ligne\n");}
 INITVALEUR : DEC var {printf("valeur initialiser");insertion(maListe,$2);}
 ;
 
-DEC : dec {printf("declar");}
+DEC : decla {printf("declar");}
 
 DESSINERCARREE : CARREE parOuvrant NOMBRE virgule NOMBRE parFermant parOuvrant NOMBRE virgule NOMBRE parFermant {
 	//visitCarree();
@@ -111,7 +124,8 @@ VARIABLE : var {char* v =$1;$$=v;printf("variable est %s\n",$1);}
 BOUCLEVAR : chevronOuvrant var virgule NOMBRE virgule {
 printf("boucle sur %s",$2);
 if(!chercherVar(maListe,$2)){
-        return yyerror("variable non initialise");
+        yyerror("variable non initialise");
+	return 2;
         }
         else{
                 setVarBoucle(maListe,$2);
@@ -166,14 +180,14 @@ COULEUR : colSymb COL {
 	printf("couleur\n"); 
 }
 
-COL : bleu {printf("bleu\n");couleur="bleu";}
-| rouge {printf("rouge\n");couleur="rouge";}
-| noir {printf("noir\n");couleur="noir";}
+COL : bleu {printf("bleu\n");couleur=(char*)"bleu";}
+| rouge {printf("rouge\n");couleur=(char*)"rouge";}
+| noir {printf("noir\n");couleur=(char*)"noir";}
 ;
 
 OPERATION : parOuvrant CALCUL parFermant {$$=$2;}
 
-CALCUL : NOMBRE plus NOMBRE { printf("%d + %d\n",$1,$3);$$=$1+$3;}
+CALCUL : NOMBRE plu NOMBRE { printf("%d + %d\n",$1,$3);$$=$1+$3;}
 | NOMBRE moins NOMBRE { printf("%d - %d\n",$1,$3);$$=$1-$3;}
 | NOMBRE fois NOMBRE { printf("%d * %d\n",$1,$3);$$=$1*$3;}
 | NOMBRE diviser NOMBRE { printf("%d / %d\n",$1,$3);$$=$1/$3;}
@@ -196,7 +210,7 @@ int main(int argc, char *argv[])
 }
 
 int lancerParseur(char* fichier){
-	maListe = initialisation();
+	
         printf("Application dessin \n");
         yyin=fopen(fichier,"r+");
         if(yyin==NULL)
@@ -207,8 +221,8 @@ int lancerParseur(char* fichier){
         else
         {
                 yyparse();
-                return 0;
-        }
+		return 0;
+	}
 }
 
 
@@ -223,3 +237,152 @@ int yywrap()
 {
 	return(1);
 }
+
+
+
+
+
+
+Liste *initialisation()
+{
+    Liste *liste = (Liste *)malloc(sizeof(*liste));
+    Element *element = (Element *)malloc(sizeof(*element));
+
+    bool varBoucle=false;
+    element->nombre = 0;
+    element->nom=(char*)"debut de liste";
+    element->suivant = NULL;
+    liste->premier = element;
+
+    return liste;
+}
+
+void insertion(Liste *liste, char* n)
+{
+    
+    Element *nouveau = (Element *)malloc(sizeof(*nouveau));
+
+    nouveau->nombre = 0;
+    nouveau->nom = n;
+    nouveau->varBoucle=false;
+    nouveau->suivant = liste->premier;
+    liste->premier = nouveau;
+}
+
+void setVal(Liste *liste,int nvNombre,char*n){
+	Element *actuel = liste->premier;
+
+        while (actuel != NULL)
+        {
+                //printf("%s\n",actuel->nom);
+                if(strcmp(actuel->nom,n)){
+                        //printf("settage : %s != %s\n",actuel->nom,n);
+                        actuel=actuel->suivant;
+                }
+                else{
+                        //printf("settage : %s = %s\n",actuel->nom,n);
+                     	actuel->nombre=nvNombre;
+                        actuel=actuel->suivant;
+                }
+        }
+}
+
+
+int getVal(Liste *liste,char*n){
+        Element *actuel = liste->premier;
+
+        while (actuel != NULL)
+        {
+                //printf("%s\n",actuel->nom);
+                if(strcmp(actuel->nom,n)){
+                        //printf("settage : %s != %s\n",actuel->nom,n);
+                        actuel=actuel->suivant;
+                }
+                else{
+                        //printf("settage : %s = %s\n",actuel->nom,n);
+                        return actuel->nombre;
+                        actuel=actuel->suivant;
+                }
+        }
+	return 0;
+}
+
+
+void setVarBoucle(Liste *liste, char* n){
+	Element *actuel = liste->premier;
+
+    	while (actuel != NULL)
+    	{
+        	//printf("%s\n",actuel->nom);
+        	if(strcmp(actuel->nom,n)){
+			//printf("settage : %s != %s\n",actuel->nom,n);
+               		actuel=actuel->suivant;
+        	}
+        	else{
+			//printf("settage : %s = %s\n",actuel->nom,n);
+			if(actuel->varBoucle==false){
+				actuel->varBoucle=true;
+			}
+			else{
+				actuel->varBoucle=false;
+			}
+			actuel=actuel->suivant;
+        	}
+    	}
+}
+
+
+bool isVarBoucle(Liste *liste, char* n){
+	Element *actuel = liste->premier;
+
+        while (actuel != NULL)
+        {
+                //printf("%s\n",actuel->nom);
+                if(strcmp(actuel->nom,n)){
+                        //printf("varBoucle : %s != %s\n",actuel->nom,n);
+                        actuel=actuel->suivant;
+                }
+                else{
+                        //printf("varboucle : %s = %s %d\n",actuel->nom,n,actuel->varBoucle);
+                        if(actuel->varBoucle==true){
+                                return true;
+                        }
+			actuel=actuel->suivant;
+                }
+        }
+	return false;
+}
+
+void afficherListe(Liste *liste)
+{
+    Element *actuel = liste->premier;
+
+    while (actuel != NULL)
+    {
+        printf("%s = %d , %d\n",actuel->nom,actuel->nombre,actuel->varBoucle);
+        actuel = actuel->suivant;
+    }
+}
+
+bool chercherVar(Liste *liste, char* n)
+{
+	//printf("var checher est %s\n",n);
+    Element *actuel = liste->premier;
+
+    while (actuel != NULL)
+    {
+	//printf("%s\n",actuel->nom);
+	if(strcmp(actuel->nom,n)){
+		//printf("%s != %s\n",actuel->nom,n);
+		actuel=actuel->suivant;
+	}
+	else{
+		
+		return true;
+	}
+    }
+	
+	return false;
+
+}
+
