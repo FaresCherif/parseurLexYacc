@@ -1,17 +1,9 @@
 DEBUTPROGRAMME
-DebutDessin{0,0
-(0,1);
-(1,1);
-DEC x;
-x<-5;
 
-(1,0);
-(0,0);
-Couleur : BLEU;
-(1,1);
-ligne(1,0)(0,1);
 carree(2,3)(5,6);
 
-;
-};
+Couleur : BLEU;
+ligne(0,1)(1,0);
+ligne(0,0)(1,1);
+
 ;
