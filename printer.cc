@@ -65,12 +65,23 @@ void Printer::visitWhile(const While *w) {
   w->getBody()->visit(*this);
 }
 
+void Printer::visitLigne(const Ligne *l) {
+  cout<<"trace ligne";
+}
+
+void Printer::visitCarree(const Carree *c){
+	c->getL1()->visit(*this);
+c->getL2()->visit(*this);
+c->getL3()->visit(*this);
+c->getL4()->visit(*this);
+}
+
 void Printer::visitSeq(const Sequence *s) {
-  cout<<"ATTENTION Inversion possible (en fct de votre algo)!"<<endl;
+  //cout<<"ATTENTION Inversion possible (en fct de votre algo)!"<<endl;
   SeqItem *t = s->getFirst();
   while(t != NULL) {
     t->getInst()->visit(*this);
     t = t->getNext();
   }
-  cout<<"ATTENTION Inversion possible (en fct de votre algo)!"<<endl;
+  //cout<<"ATTENTION Inversion possible (en fct de votre algo)!"<<endl;
 }

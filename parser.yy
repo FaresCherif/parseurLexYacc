@@ -48,6 +48,9 @@ Liste *initialisation();
 	char *variable;
 	Instruction* instr;
 	Expression* expr;
+	Carree*  care;
+	Ligne* lign;
+	Affect* af;
 }
 
 %token fin plu moins fois diviser baisserCrayon leverCrayon debut
@@ -57,15 +60,18 @@ Liste *initialisation();
 
 %start S
 
-%type<num> DESSIN NOMBRE CALCUL DESSINER COULEUR BOUCLE FINBOUCLE DEPLACERCRAYON DESSING X OPERATION
-%type<num> DESSINERLIGNE DESSINERCARREE LIGNE CARREE BOUCLEVALFINAL
+%type<num> DESSIN NOMBRE CALCUL DESSINER COULEUR BOUCLE FINBOUCLE DESSING X OPERATION
+%type<num> LIGNE CARREE BOUCLEVALFINAL
 %type<variable> VARIABLE BOUCLEVAR
-%type<variable> DECLARERVALEUR DEC
+%type<variable> DEC
 %type<instr> INITVALEUR 
+%type<care> DESSINERCARREE 
+%type<lign> DEPLACERCRAYON DESSINERLIGNE 
+%type<af> DECLARERVALEUR 
 
 %%
 
-S : DEBUTPROGRAMME DESSIN {printf("fin programme\n\n");afficherListe(maListe);return 0;}
+S : DEBUTPROGRAMME DESSIN {printf("fin programme\n\n");afficherListe(maListe);YYACCEPT;;}
 
 DEBUTPROGRAMME : debut {maListe = initialisation();}
 
@@ -77,11 +83,18 @@ DESSING :
 DEBUTDESSIN DESSINER leverCrayon fin {printf("dessin fini ");}
 | BOUCLE fin {printf("boucle fini\n");}
 | INITVALEUR fin {printf("valeur initialiser\n");}
-| DECLARERVALEUR fin {printf("declarer valeur %s\n",$1);}
+| DECLARERVALEUR fin {printf("declarer valeur \n");}
 | COULEUR fin {printf("changer couleur\n");}
 
 DESSINERLIGNE :  LIGNE parOuvrant NOMBRE virgule NOMBRE parFermant parOuvrant NOMBRE virgule NOMBRE parFermant {
 	printf("trait de %d,%d a %d,%d en %s\n",$3,$5,$8,$10,couleur);
+	Float* x1= new Float($3);
+	Float* x2=new Float($8);
+	Float* y1 = new Float($5);
+	Float* y2 = new Float($10);
+	Ligne* l1 = new Ligne(x1,y1,x2,y1);
+	
+	$$=l1;	
 }
 ;
 
@@ -98,6 +111,21 @@ DESSINERCARREE : CARREE parOuvrant NOMBRE virgule NOMBRE parFermant parOuvrant N
 	printf("trait de %d,%d a %d,%d en %s\n",$8,$5,$8,$10,couleur);
 	printf("trait de %d,%d a %d,%d en %s\n",$8,$10,$3,$10,couleur);
 	printf("trait de %d,%d a %d,%d en %s\n",$3,$10,$3,$5,couleur);
+	Float* x1= new Float($3);
+	Float* x2=new Float($8);
+	Float* y1 = new Float($5);
+	Float* y2 = new Float($10);
+	Ligne* l1 = new Ligne(x1,y1,x2,y1);
+	Ligne* l2 = new Ligne(x2,y1,x2,y2);
+	Ligne* l3 = new Ligne(x2,y1,x1,y2);
+	Ligne* l4 = new Ligne(x1,y2,x1,y1);
+	Carree *c = new Carree(l1,l2,l3,l4);
+
+	$$=c;
+	Sequence *seq = new Sequence();
+	seq->add(c);
+	Printer printer;
+  	seq->visit(printer);
 }
 
 CARREE : carree{
@@ -106,8 +134,19 @@ CARREE : carree{
 
 DEPLACERCRAYON : parOuvrant NOMBRE virgule NOMBRE parFermant {
 	printf("trait de %d,%d a %d,%d en %s\n",p.posX,p.posY,$2,$4,couleur);
+
+	Float* x1= new Float(p.posX);
+	Float* x2=new Float($2);
+	Float* y1 = new Float(p.posY);
+	Float* y2 = new Float($4);
+
+	Ligne* l1 = new Ligne(x1,y1,x2,y1);
+	
+
 	p.posX=$2;
 	p.posY=$4;
+
+	$$=l1;
 }
 
 DECLARERVALEUR : VARIABLE assigne NOMBRE {
@@ -124,8 +163,14 @@ DECLARERVALEUR : VARIABLE assigne NOMBRE {
 	else{
 		printf("%s n'est pas boucle :\n\n",$1); 
 	}
+	Float* f = new Float($3);
+	Affect* a = new Affect($1,f);
+
 	setVal(maListe,$3,$1);
-	printf("variable declare est : %s\n",$1);$$=$1;
+	
+	printf("variable declare est : %s\n",$1);
+	
+	$$=a;
 }
 ;
 

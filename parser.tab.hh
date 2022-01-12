@@ -92,8 +92,11 @@ union YYSTYPE
 	char *variable;
 	Instruction* instr;
 	Expression* expr;
+	Carree*  care;
+	Ligne* lign;
+	Affect* af;
 
-#line 97 "parser.tab.hh"
+#line 100 "parser.tab.hh"
 
 };
 typedef union YYSTYPE YYSTYPE;

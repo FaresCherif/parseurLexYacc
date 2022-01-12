@@ -11,7 +11,8 @@ class Decl;
 class While;
 class Sequence;
 class Var;
-
+class Ligne;
+class Carree;
 
 class Visitor {
 public:
@@ -24,6 +25,8 @@ public:
   virtual void visitDecl(const Decl *d) = 0;
   virtual void visitWhile(const While *w) = 0;
   virtual void visitSeq(const Sequence *s) = 0;
+  virtual void visitLigne(const Ligne *l) = 0;
+  virtual void visitCarree(const Carree *c) = 0;
 };
 
 
