@@ -3,27 +3,27 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct Element Element;
-struct Element
+typedef struct Variab Variab ;
+struct Variab 
 {
     int nombre;
     char* nom;
     bool varBoucle;
-    Element *suivant;
+    Variab *suivant;
 };
 
 
 typedef struct Liste Liste;
 struct Liste
 {
-    Element *premier;
+    Variab *premier;
 };
 
 
 Liste *initialisation()
 {
     Liste *liste = (Liste *)malloc(sizeof(*liste));
-    Element *element = (Element *)malloc(sizeof(*element));
+    Variab *element = (Variab *)malloc(sizeof(*element));
 
     bool varBoucle=false;
     element->nombre = 0;
@@ -37,7 +37,7 @@ Liste *initialisation()
 void insertion(Liste *liste, char* n)
 {
     
-    Element *nouveau = (Element *)malloc(sizeof(*nouveau));
+    Variab *nouveau = (Variab *)malloc(sizeof(*nouveau));
 
     nouveau->nombre = 0;
     nouveau->nom = n;
@@ -47,7 +47,7 @@ void insertion(Liste *liste, char* n)
 }
 
 void setVal(Liste *liste,int nvNombre,char*n){
-	Element *actuel = liste->premier;
+	Variab  *actuel = liste->premier;
 
         while (actuel != NULL)
         {
@@ -66,7 +66,7 @@ void setVal(Liste *liste,int nvNombre,char*n){
 
 
 int getVal(Liste *liste,char*n){
-        Element *actuel = liste->premier;
+        Variab  *actuel = liste->premier;
 
         while (actuel != NULL)
         {
@@ -86,7 +86,7 @@ int getVal(Liste *liste,char*n){
 
 
 void setVarBoucle(Liste *liste, char* n){
-	Element *actuel = liste->premier;
+	Variab  *actuel = liste->premier;
 
     	while (actuel != NULL)
     	{
@@ -110,7 +110,7 @@ void setVarBoucle(Liste *liste, char* n){
 
 
 bool isVarBoucle(Liste *liste, char* n){
-	Element *actuel = liste->premier;
+	Variab  *actuel = liste->premier;
 
         while (actuel != NULL)
         {
@@ -132,7 +132,7 @@ bool isVarBoucle(Liste *liste, char* n){
 
 void afficherListe(Liste *liste)
 {
-    Element *actuel = liste->premier;
+    Variab  *actuel = liste->premier;
 
     while (actuel != NULL)
     {
@@ -144,7 +144,7 @@ void afficherListe(Liste *liste)
 bool chercherVar(Liste *liste, char* n)
 {
 	//printf("var checher est %s\n",n);
-    Element *actuel = liste->premier;
+    Variab  *actuel = liste->premier;
 
     while (actuel != NULL)
     {
@@ -162,4 +162,3 @@ bool chercherVar(Liste *liste, char* n)
 	return false;
 
 }
-
