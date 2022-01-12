@@ -1,8 +1,15 @@
 DEBUTPROGRAMME
 DEC x;
-x<-5;
-Boucle(x,5,8)
-DEC o;
-o<-5;
+DEC y;
+DEC x2;
+DEC y2;
+
+Boucle(x,0,10)
+Boucle(y,0,5)
+carree(x,y)((x+1),(y+1));
+;;;
+
+;;;
+
+
 ;
-;;

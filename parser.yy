@@ -62,13 +62,13 @@ Printer printer;
 
 %start S
 
-%type<num> NOMBRE FINBOUCLE X 
+%type<num> NOMBRE FINBOUCLE X CALCUL OPERATION
 %type<num> LIGNE CARREE BOUCLEVALFINAL
 %type<variable> VARIABLE BOUCLEVAR
 %type<variable> DEC
 
 %type<instr> INITVALEUR DESSINERG DESSINER DECLARERVALEUR COL COULEUR DESSING BOUCLE DESSIN DEPLACERCRAYON DESSINERLIGNE DESSINERCARREE 
-%type<expr> CALCUL OPERATION
+
 
 %%
 
@@ -108,6 +108,13 @@ $$=$1;
 
 $$=$1;
 }
+| DESSINERCARREE fin {
+$$=$1;
+}
+| DESSINERLIGNE fin {
+$$=$1;
+}
+
 
 DESSINERLIGNE :  LIGNE parOuvrant NOMBRE virgule NOMBRE parFermant parOuvrant NOMBRE virgule NOMBRE parFermant {
 	//printf("trait de %d,%d a %d,%d en %s\n",$3,$5,$8,$10,couleur);
@@ -248,12 +255,15 @@ Float* fMin = new Float(getVal(maListe,$1));
 Float* fMax = new Float($2);
 While* w = new While($1,$3,fMin,fMax);
 $$=w;
-w->visit(printer);
+
+//w->visit(printer);
+
 setVal(maListe,$2,$1);
+
 }
 ;
 
-FINBOUCLE : {
+FINBOUCLE : fin {
 	//printf("fin boucle\n");
 }
 ;
@@ -314,39 +324,40 @@ CALCUL : NOMBRE plu NOMBRE {
 
 Float* f1= new Float($1);
 Float* f2 = new Float($3);
-Operator* o=new Operator(PLUS,f1,f2);
-$$=o;
+//Operator* o=new Operator(PLUS,f1,f2);
+$$=$1+$3;
 }
 | NOMBRE moins NOMBRE { 
 //printf("%d - %d\n",$1,$3);
 
 Float* f1= new Float($1);
 Float* f2 = new Float($3);
-Operator* o=new Operator(MOINS,f1,f2);
-$$=o;
+//Operator* o=new Operator(MOINS,f1,f2);
+$$=$1-$3;
 }
 | NOMBRE fois NOMBRE { 
 //printf("%d * %d\n",$1,$3);
 
 Float* f1= new Float($1);
 Float* f2 = new Float($3);
-Operator* o=new Operator(MULT,f1,f2);
-$$=o;
+//Operator* o=new Operator(MULT,f1,f2);
+$$=$1*$3;
 
 }
 | NOMBRE diviser NOMBRE { 
 //printf("%d / %d\n",$1,$3);
 Float* f1= new Float($1);
 Float* f2 = new Float($3);
-Operator* o=new Operator(DIV,f1,f2);
+//Operator* o=new Operator(DIV,f1,f2);
 
-$$=o;
+$$=$1/$3;
 }
 ;
 
 NOMBRE: X {$$=$1;}
 | var {$$=getVal(maListe,$1);}
-| OPERATION {/*$$=$1;*/}
+| OPERATION {$$=$1;
+}
 ;
 
 X :
