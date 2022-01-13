@@ -15,9 +15,14 @@
 #include "ligne.hh"
 #include "carree.hh"
 #include "couleur.hh"
+#include "CImg.h"
+
+using namespace cimg_library;
 
 class Printer : public Visitor {
 public:
+  CImg<unsigned char> image;
+
   void visitFloat(const Float *f);
   void visitVar(const Var *v);
   void visitOperator(const Operator *o);

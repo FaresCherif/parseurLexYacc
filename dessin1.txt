@@ -1,9 +1,9 @@
 DEBUTPROGRAMME
 
-carree(2,3)(5,6);
+carree(1,1)(400,400);
 
 Couleur : BLEU;
-ligne(0,1)(1,0);
-ligne(0,0)(1,1);
+ligne(1,400)(400,1);
+ligne(1,1)(400,400);
 
 ;

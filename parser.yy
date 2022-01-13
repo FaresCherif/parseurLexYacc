@@ -75,7 +75,7 @@ Printer printer;
 S : DEBUTPROGRAMME DESSIN {printf("fichier accepte\n\n");afficherListe(maListe);
 	Sequence* s = new Sequence($2);
 
-
+s->visit(printer);
 
 YYACCEPT;}
 
@@ -122,12 +122,12 @@ DESSINERLIGNE :  LIGNE parOuvrant NOMBRE virgule NOMBRE parFermant parOuvrant NO
 	Float* x2=new Float($8);
 	Float* y1 = new Float($5);
 	Float* y2 = new Float($10);
-	Ligne* l1 = new Ligne(x1,y1,x2,y1,couleur);
+	Ligne* l1 = new Ligne(x1,y1,x2,y2,couleur);
 	
 	$$=l1;	
 
 
- 	l1->visit(printer);
+ 	//l1->visit(printer);
 }
 ;
 
@@ -151,19 +151,20 @@ DESSINERCARREE : CARREE parOuvrant NOMBRE virgule NOMBRE parFermant parOuvrant N
 	//printf("trait de %d,%d a %d,%d en %s\n",$8,$5,$8,$10,couleur);
 	//printf("trait de %d,%d a %d,%d en %s\n",$8,$10,$3,$10,couleur);
 	//printf("trait de %d,%d a %d,%d en %s\n",$3,$10,$3,$5,couleur);
+
 	Float* x1= new Float($3);
 	Float* x2=new Float($8);
 	Float* y1 = new Float($5);
 	Float* y2 = new Float($10);
 	Ligne* l1 = new Ligne(x1,y1,x2,y1,couleur);
 	Ligne* l2 = new Ligne(x2,y1,x2,y2,couleur);
-	Ligne* l3 = new Ligne(x2,y1,x1,y2,couleur);
+	Ligne* l3 = new Ligne(x2,y2,x1,y2,couleur);
 	Ligne* l4 = new Ligne(x1,y2,x1,y1,couleur);
 	Carree *c = new Carree(l1,l2,l3,l4);
 
 	$$=c;
 
-	c->visit(printer);
+	//c->visit(printer);
 	
 }
 
@@ -187,7 +188,7 @@ DEPLACERCRAYON : parOuvrant NOMBRE virgule NOMBRE parFermant {
 
 	$$=l1;
 
-l1->visit(printer);
+//l1->visit(printer);
 }
 
 DECLARERVALEUR : VARIABLE assigne NOMBRE {
@@ -214,7 +215,7 @@ DECLARERVALEUR : VARIABLE assigne NOMBRE {
 	
 	$$=a;
 
-a->visit(printer);
+//a->visit(printer);
 }
 ;
 
@@ -277,6 +278,7 @@ DEBUTDESSIN : baisserCrayon NOMBRE virgule NOMBRE {
 DESSINER : DESSINERG DESSINER {
    Sequence* s = new Sequence($1);
    s->add($2);
+ $$=s;
 }
 | fin {
 

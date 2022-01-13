@@ -28,6 +28,13 @@ Une variable declare a par defaut comme valeur 0
 Le lex a ete legerement modifie au cours du projet afin d'avoir le moins d'operateur possible et d'avoir la grammaire 
 la plus comprehensible possible.
 
+Comme demande, toute les commandes sont suivis d'un poit-virgule pour preciser qu'elle est fini. Cela est egalement vrai
+pour les expression sans valeur ( epsilon comme possible dans DESSIN) qui sont donc uniquement compose d'un point-virgule.
+
+Les fichiers acceptes commencent forcement par DEBUTPROGRAMME, cela permet de cree le tableau contenant les variables. On y
+met une premiere variable qui servira de premiere tete de liste . Cette variable a des espaces dans son nom ce qui la rend
+non appelable puisque les variables acceptés n'ont pas d'espace.
+
 
 Pour la boucle plusieurs verifications sont faites :
 - la variable de la boucle ne doit pas etre modifie (les variable ont un boolean qui est mis a trou en debut de boucles se
@@ -38,3 +45,4 @@ Pour la boucle plusieurs verifications sont faites :
   sinon on lance une erreur;
 
 
+Un fichier visuel 
